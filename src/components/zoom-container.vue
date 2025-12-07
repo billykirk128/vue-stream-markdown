@@ -68,13 +68,11 @@ function onWheel(event: WheelEvent) {
     ref="containerRef"
     data-stream-markdown="zoom-container"
     @wheel="onWheel"
-    @mousedown="startDrag"
-    @mousemove="onDrag"
-    @mouseup="stopDrag"
-    @mouseleave="stopDrag"
-    @touchstart.passive="startDrag"
-    @touchmove.passive="onDrag"
-    @touchend.passive="stopDrag"
+    @pointerdown.prevent="startDrag"
+    @pointermove.prevent="onDrag"
+    @pointerup.prevent="stopDrag"
+    @pointercancel.prevent="stopDrag"
+    @pointerleave.prevent="stopDrag"
   >
     <div v-if="showControl" data-stream-markdown="zoom-controls" :style="controlsStyle">
       <Button
@@ -114,6 +112,7 @@ function onWheel(event: WheelEvent) {
   height: 100%;
   position: relative;
   overflow: hidden;
+  touch-action: none;
 }
 
 .stream-markdown [data-stream-markdown='zoom-inner'] {

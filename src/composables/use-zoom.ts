@@ -58,40 +58,25 @@ export function useZoom(options: UseZoomOptions = {}) {
   }
 
   // Drag functionality
-  function startDrag(e: MouseEvent | TouchEvent) {
+  function startDrag(e: PointerEvent) {
     isDragging.value = true
-    if (e instanceof MouseEvent) {
-      dragStart.value = {
-        x: e.clientX - translateX.value,
-        y: e.clientY - translateY.value,
-      }
+    dragStart.value = {
+      x: e.clientX - translateX.value,
+      y: e.clientY - translateY.value,
     }
-    else {
-      dragStart.value = {
-        x: e.touches[0].clientX - translateX.value,
-        y: e.touches[0].clientY - translateY.value,
-      }
+
+    if (e.pointerType !== 'mouse') {
+      if (e.target instanceof HTMLElement)
+        e.target.setPointerCapture(e.pointerId)
     }
   }
 
-  function onDrag(e: MouseEvent | TouchEvent) {
+  function onDrag(e: PointerEvent) {
     if (!isDragging.value)
       return
 
-    let clientX: number
-    let clientY: number
-
-    if (e instanceof MouseEvent) {
-      clientX = e.clientX
-      clientY = e.clientY
-    }
-    else {
-      clientX = e.touches[0].clientX
-      clientY = e.touches[0].clientY
-    }
-
-    translateX.value = clientX - dragStart.value.x
-    translateY.value = clientY - dragStart.value.y
+    translateX.value = e.clientX - dragStart.value.x
+    translateY.value = e.clientY - dragStart.value.y
   }
 
   function stopDrag() {

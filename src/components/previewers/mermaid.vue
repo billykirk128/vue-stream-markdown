@@ -183,5 +183,6 @@ if (!props.containerHeight) {
 .stream-markdown [data-stream-markdown='mermaid'] {
   display: flex;
   justify-content: center;
+  user-select: none;
 }
 </style>
