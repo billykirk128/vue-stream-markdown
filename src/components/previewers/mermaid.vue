@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CodeNodeRendererProps } from '../../types'
+import type { CodeNodeRendererProps, ZoomControlPosition } from '../../types'
 import { throttle } from '@antfu/utils'
 import { useResizeObserver } from '@vueuse/core'
 import { computed, ref, toRefs, watch } from 'vue'
@@ -25,7 +25,12 @@ const { isControlEnabled, getControlValue } = useControls({
 })
 
 const showControl = computed(() => isControlEnabled('mermaid.position'))
-const controlPosition = computed(() => getControlValue('mermaid.position'))
+const controlPosition = computed((): ZoomControlPosition | undefined => {
+  const position = getControlValue('mermaid.position')
+  if (typeof position === 'string')
+    return position as ZoomControlPosition
+  return 'bottom-right'
+})
 
 const renderFlag = ref<boolean>(false)
 const svg = ref<string>()

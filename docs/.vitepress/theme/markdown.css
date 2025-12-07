@@ -8,3 +8,7 @@
   display: table;
   margin: 0;
 }
+
+.vp-doc .stream-markdown code {
+  padding: 0;
+}

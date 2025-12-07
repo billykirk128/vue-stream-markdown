@@ -311,6 +311,12 @@ watch(
   color: var(--muted-foreground);
 }
 
+@media (max-width: 1024px) {
+  .stream-markdown [data-stream-markdown='code-block-header'] {
+    padding-inline: 0.5rem;
+  }
+}
+
 .stream-markdown [data-stream-markdown='code-block-content'] {
   overflow: auto;
 }

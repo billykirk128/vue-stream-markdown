@@ -18,6 +18,7 @@ interface UseShikiOptions {
 }
 
 let highlighter: Highlighter | null = null
+let createHighlighterPromise: Promise<Highlighter> | null = null
 
 export function useShiki(options?: UseShikiOptions) {
   const installed = ref<boolean>(false)
@@ -59,6 +60,11 @@ export function useShiki(options?: UseShikiOptions) {
   }
 
   async function getHighlighter(): Promise<Highlighter> {
+    if (createHighlighterPromise) {
+      highlighter = await createHighlighterPromise
+      createHighlighterPromise = null
+    }
+
     if (highlighter) {
       const loadedLangs = highlighter.getLoadedLanguages()
       const loadedThemes = highlighter.getLoadedThemes()
@@ -77,16 +83,20 @@ export function useShiki(options?: UseShikiOptions) {
       return highlighter
     }
 
-    const { createHighlighter } = await import('shiki')
+    createHighlighterPromise = (async () => {
+      const { createHighlighter } = await import('shiki')
+      return createHighlighter({
+        themes: [await getTheme()],
+        langs: [await getLanguage()],
+        langAlias: {
+          ...LANGUAGE_ALIAS,
+          ...langAlias.value,
+        },
+      })
+    })()
 
-    highlighter = await createHighlighter({
-      themes: [await getTheme()],
-      langs: [await getLanguage()],
-      langAlias: {
-        ...LANGUAGE_ALIAS,
-        ...langAlias.value,
-      },
-    })
+    highlighter = await createHighlighterPromise
+    createHighlighterPromise = null
     return highlighter
   }
 

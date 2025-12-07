@@ -108,8 +108,6 @@ The default HTML previewer renders HTML content in a sandboxed iframe with `allo
 
 **Disable HTML previewer:**
 
-<StreamMarkdown :content="htmlExample" :previewers="disableHtmlPreviewer" />
-
 ```vue
 <script setup lang="ts">
 import type { PreviewerConfig } from 'vue-stream-markdown'

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-// @ts-expect-error ???
 import IconButton from '@shared/components/icon-button.vue'
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import { useData } from 'vitepress'
-import { computed, defineComponent, h, ref } from 'vue'
-// @ts-expect-error ???
+import { computed, defineComponent, h, ref, useAttrs } from 'vue'
 import { Markdown } from 'vue-stream-markdown'
 
 const props = withDefaults(defineProps<{
@@ -16,7 +15,29 @@ const props = withDefaults(defineProps<{
   typingDelay: 30,
 })
 
+const attrs = useAttrs()
+
 const mode = ref<'streaming' | 'static'>(props.mode)
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const isMobile = breakpoints.smaller('lg')
+const previewable = computed(
+  () => props.content.includes('\`\`\`mermaid') || props.content.includes('\`\`\`html'),
+)
+
+const codeOptions = computed(() => {
+  if (attrs['code-options'])
+    return attrs['code-options']
+
+  if (!isMobile.value || !previewable.value)
+    return
+
+  return {
+    languageIcon: false,
+    languageName: false,
+    lineNumbers: false,
+  }
+})
 
 const playable = computed(() => props.mode === 'static')
 
@@ -96,12 +117,12 @@ function cleanup() {
       minHeight: minHeight ? `${minHeight}px` : undefined,
     }"
   >
-    <div class="opacity-0 duration-300 absolute group-hover:opacity-100 hover:opacity-100 -left-9 -top-1">
+    <div class="opacity-0 duration-300 absolute z-10 group-hover:opacity-100 hover:opacity-100 -left-4 -top-4">
       <IconButton
         v-if="playable"
         :name="name"
         :icon="generateIcon(icon)"
-        :button-class="['rounded-full']"
+        :button-class="['rounded-full', 'bg-background', 'p-1']"
         @click="toggle"
       />
     </div>
@@ -114,6 +135,7 @@ function cleanup() {
       :shiki-options="{
         theme: ['kanagawa-lotus', 'kanagawa-dragon'],
       }"
+      :code-options="codeOptions"
     />
   </div>
 </template>

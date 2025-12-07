@@ -1,3 +1,9 @@
+catalogMode: prefer
+cleanupUnusedCatalogs: true
+
+shellEmulator: true
+trustPolicy: no-downgrade
+
 packages:
   - .
   - playground
@@ -5,7 +11,7 @@ packages:
 catalogs:
   build:
     '@vitejs/plugin-vue': ^6.0.2
-    tsdown: ^0.16.8
+    tsdown: ^0.17.0
     unplugin-icons: ^22.5.0
     unplugin-lightningcss: ^0.4.3
     vite: ^7.2.6
@@ -26,9 +32,9 @@ catalogs:
     vue-tippy: ^6.7.1
   icons:
     '@iconify-json/catppuccin': ^1.2.17
-    '@iconify-json/lucide': ^1.2.78
+    '@iconify-json/lucide': ^1.2.79
   lint:
-    '@antfu/eslint-config': ^6.4.1
+    '@antfu/eslint-config': ^6.4.2
     '@unocss/eslint-plugin': 66.5.9
     eslint: ^9.39.1
     eslint-plugin-format: ^1.1.0
@@ -63,7 +69,7 @@ catalogs:
     vitest: ^4.0.15
   tsc:
     typescript: ^5.9.3
-    vue-tsc: ^3.1.5
+    vue-tsc: ^3.1.6
   types:
     '@types/node': ^24.10.1
   utils:

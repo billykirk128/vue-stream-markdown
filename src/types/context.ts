@@ -64,10 +64,12 @@ export type ImageControlsConfig
       download?: boolean
     }
 
+export type ZoomControlPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+
 export type ZoomControlsConfig
   = | boolean
     | {
-      position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+      position?: ZoomControlPosition
     }
 
 export type ControlsConfig
