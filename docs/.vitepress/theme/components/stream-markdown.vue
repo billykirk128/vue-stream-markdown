@@ -42,7 +42,7 @@ const codeOptions = computed(() => {
 const playable = computed(() => props.mode === 'static')
 
 const typingIndex = ref<number>(0)
-const interval = ref<NodeJS.Timeout | null>(null)
+const interval = ref<ReturnType<typeof setInterval> | null>(null)
 
 const containerRef = ref<HTMLDivElement>()
 const minHeight = ref<number>()
@@ -63,21 +63,24 @@ const name = computed(
     : 'Start Typing',
 )
 
-const icon = computed(
-  () => mode.value === 'streaming'
-    ? 'i-lucide:circle-pause'
-    : 'i-lucide:circle-play',
-)
+const startIcon = defineComponent({
+  setup() {
+    return () => h('i', { class: 'i-lucide:circle-play' })
+  },
+})
 
-function generateIcon(icon: string) {
-  return defineComponent({
-    setup() {
-      return () => h('i', { class: icon })
-    },
-  })
-}
+const stopIcon = defineComponent({
+  setup() {
+    return () => h('i', { class: 'i-lucide:circle-pause' })
+  },
+})
 
 function toggle() {
+  if (mode.value === 'streaming') {
+    cleanup()
+    return
+  }
+
   // generate min height to avoid height jumping when toggling
   if (containerRef.value && mode.value === 'static') {
     const { height } = containerRef.value.getBoundingClientRect()
@@ -117,16 +120,6 @@ function cleanup() {
       minHeight: minHeight ? `${minHeight}px` : undefined,
     }"
   >
-    <div class="opacity-0 duration-300 absolute z-10 group-hover:opacity-100 hover:opacity-100 -left-4 -top-4">
-      <IconButton
-        v-if="playable"
-        :name="name"
-        :icon="generateIcon(icon)"
-        :button-class="['rounded-full', 'bg-background', 'p-1']"
-        @click="toggle"
-      />
-    </div>
-
     <Markdown
       v-bind="$attrs"
       :mode="mode"
@@ -137,5 +130,15 @@ function cleanup() {
       }"
       :code-options="codeOptions"
     />
+
+    <div class="opacity-0 duration-300 absolute z-10 group-hover:opacity-100 hover:opacity-100 -left-4 -top-4">
+      <IconButton
+        v-if="playable"
+        :name="name"
+        :icon="mode === 'static' ? startIcon : stopIcon"
+        :button-class="['rounded-full', 'bg-background', 'p-1']"
+        @click="() => toggle()"
+      />
+    </div>
   </div>
 </template>
