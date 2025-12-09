@@ -3,13 +3,13 @@ import type { TokensResult } from 'shiki'
 import type { CodeNodeRendererProps } from '../../../types'
 import { computed, defineAsyncComponent, ref, toRefs, watch } from 'vue'
 import { useShiki } from '../../../composables'
-import VanillaRenderer from './vanilla.vue'
+import VanillaRenderer from './vanilla'
 
 const props = withDefaults(defineProps<CodeNodeRendererProps>(), {})
 
 const { shikiOptions, codeOptions, isDark } = toRefs(props)
 
-const ShikiTokensRenderer = defineAsyncComponent(() => import('./renderer'))
+const ShikiTokensRenderer = defineAsyncComponent(() => import('./shiki-token-renderer'))
 
 const code = computed(() => props.node.value.trim())
 const lang = computed(() => props.node.lang || '')
@@ -47,7 +47,6 @@ watch(
     data-stream-markdown="code"
     :data-show-line-numbers="showLineNumbers"
     :tokens="tokens"
-    :show-line-numbers="showLineNumbers"
   />
   <VanillaRenderer v-else v-bind="props" />
 </template>

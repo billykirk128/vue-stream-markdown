@@ -21,14 +21,12 @@ const Error = computed(() => katexOptions.value?.errorComponent ?? ErrorComponen
 </script>
 
 <template>
-  <Transition name="table-node-fade">
-    <component
-      :is="Error"
-      v-if="error"
-      variant="katex"
-      :message="errorMessage"
-      v-bind="props"
-    />
-    <span v-else data-stream-markdown="inline-math" v-html="html" />
-  </Transition>
+  <component
+    :is="Error"
+    v-if="error"
+    variant="katex"
+    :message="errorMessage"
+    v-bind="props"
+  />
+  <span v-else data-stream-markdown="inline-math" v-html="html" />
 </template>

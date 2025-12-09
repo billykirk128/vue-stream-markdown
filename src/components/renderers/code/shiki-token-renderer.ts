@@ -10,10 +10,6 @@ export default defineComponent({
       type: Object as PropType<TokensResult>,
       required: true,
     },
-    showLineNumbers: {
-      type: Boolean,
-      default: true,
-    },
   },
   setup(props) {
     return () => h(
@@ -25,7 +21,6 @@ export default defineComponent({
         ],
         'data-language': props.tokens.grammarState?.lang,
         'style': {
-          padding: '1rem',
           counterReset: 'line',
         },
       },
@@ -36,12 +31,8 @@ export default defineComponent({
           (line, index) => h(
             'div',
             {
-              class: 'line',
-              key: index,
-              style: {
-                fontSize: '0.875rem',
-                minHeight: '1rem',
-              },
+              'data-stream-markdown': 'code-line',
+              'key': index,
             },
             renderList(line, (token, tokenIndex) => h(
               'span',
