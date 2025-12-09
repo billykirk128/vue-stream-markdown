@@ -66,6 +66,14 @@ This project also uses and benefits from:
 - [KaTeX](https://katex.org/) - Fast math typesetting library for the web
 - [Remend](https://github.com/vercel/streamdown/tree/main/packages/remend) - Intelligently parses and styles incomplete Markdown blocks
 
+### Code Sources
+- [markstream-vue](https://github.com/Simon-He95/markstream-vue) - The original inspiration for learning AST-based custom markdown rendering, and the source of the animation implementation used in this project
+- [ast-explorer](https://github.com/sxzz/ast-explorer) - Learned AST knowledge from this project, and the playground layout inspiration and AST syntax tree filtering code are derived from it
+
+## Acknowledgments
+
+I would like to express my sincere gratitude to those who provided guidance and support during the project selection phase and promotion phase of this project. Without their encouragement and support, I would not have been able to complete this work. In particular, the [streamdown](https://streamdown.ai/) community provided excellent code guidance and even helped fix several issues.
+
 ## Troubleshooting
 
 The playground supports generating shareable links and provides streaming controls (forward/backward navigation) for debugging streaming rendering issues.

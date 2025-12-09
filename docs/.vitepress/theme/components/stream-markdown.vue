@@ -23,21 +23,21 @@ const mode = ref<'streaming' | 'static'>(props.mode)
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const isMobile = breakpoints.smaller('lg')
-const previewable = computed(
-  () => props.content.includes('\`\`\`mermaid') || props.content.includes('\`\`\`html'),
-)
 
 const codeOptions = computed(() => {
   if (attrs['code-options'])
     return attrs['code-options']
 
-  if (!isMobile.value || !previewable.value)
-    return
+  const options = {
+    languageIcon: !isMobile.value,
+    languageName: !isMobile.value,
+  }
 
   return {
-    languageIcon: false,
-    languageName: false,
-    lineNumbers: false,
+    language: {
+      mermaid: options,
+      html: options,
+    },
   }
 })
 
