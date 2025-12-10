@@ -27,6 +27,10 @@ const {
   onDrag,
   stopDrag,
   handleWheel,
+
+  handleTouchStart,
+  handleTouchMove,
+  handleTouchEnd,
 } = useZoom()
 
 const zoomPercent = computed(() => `${Math.round(zoom.value * 100)}%`)
@@ -61,6 +65,20 @@ function onWheel(event: WheelEvent) {
   if (containerRef.value)
     handleWheel(event, containerRef.value)
 }
+
+function onTouchStart(event: TouchEvent) {
+  if (containerRef.value)
+    handleTouchStart(event, containerRef.value)
+}
+
+function onTouchMove(event: TouchEvent) {
+  if (containerRef.value)
+    handleTouchMove(event, containerRef.value)
+}
+
+function onTouchEnd(event: TouchEvent) {
+  handleTouchEnd(event)
+}
 </script>
 
 <template>
@@ -68,6 +86,9 @@ function onWheel(event: WheelEvent) {
     ref="containerRef"
     data-stream-markdown="zoom-container"
     @wheel="onWheel"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+    @touchend="onTouchEnd"
     @pointerdown.prevent="startDrag"
     @pointermove.prevent="onDrag"
     @pointerup.prevent="stopDrag"

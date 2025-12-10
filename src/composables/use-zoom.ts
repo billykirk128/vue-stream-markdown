@@ -33,6 +33,16 @@ export function useZoom(options: UseZoomOptions = {}) {
   const isDragging = ref(false)
   const dragStart = ref({ x: 0, y: 0 })
 
+  const isPinching = ref(false)
+  const touchZoomState = ref<{
+    initialDistance: number
+    initialZoom: number
+    initialTranslateX: number
+    initialTranslateY: number
+    centerX: number
+    centerY: number
+  } | null>(null)
+
   const transformStyle = computed(() => ({
     transform: `translate(${translateX.value}px, ${translateY.value}px) scale(${zoom.value})`,
   }))
@@ -59,6 +69,9 @@ export function useZoom(options: UseZoomOptions = {}) {
 
   // Drag functionality
   function startDrag(e: PointerEvent) {
+    if (isPinching.value)
+      return
+
     isDragging.value = true
     dragStart.value = {
       x: e.clientX - translateX.value,
@@ -72,7 +85,7 @@ export function useZoom(options: UseZoomOptions = {}) {
   }
 
   function onDrag(e: PointerEvent) {
-    if (!isDragging.value)
+    if (!isDragging.value || isPinching.value)
       return
 
     translateX.value = e.clientX - dragStart.value.x
@@ -105,6 +118,83 @@ export function useZoom(options: UseZoomOptions = {}) {
         translateY.value = offsetY - contentMouseY * newZoom
         zoom.value = newZoom
       }
+    }
+  }
+
+  function getTouchDistance(touch1: Touch, touch2: Touch): number {
+    const dx = touch1.clientX - touch2.clientX
+    const dy = touch1.clientY - touch2.clientY
+    return Math.sqrt(dx * dx + dy * dy)
+  }
+
+  function handleTouchStart(event: TouchEvent, containerElement: HTMLElement) {
+    if (event.touches.length === 2) {
+      event.preventDefault()
+      isPinching.value = true
+
+      const touch1 = event.touches[0]
+      const touch2 = event.touches[1]
+
+      const distance = getTouchDistance(touch1, touch2)
+      const centerX = (touch1.clientX + touch2.clientX) / 2
+      const centerY = (touch1.clientY + touch2.clientY) / 2
+
+      const rect = containerElement.getBoundingClientRect()
+      const containerCenterX = rect.width / 2
+      const containerCenterY = rect.height / 2
+      const offsetX = centerX - rect.left - containerCenterX
+      const offsetY = centerY - rect.top - containerCenterY
+
+      touchZoomState.value = {
+        initialDistance: distance,
+        initialZoom: zoom.value,
+        initialTranslateX: translateX.value,
+        initialTranslateY: translateY.value,
+        centerX: offsetX,
+        centerY: offsetY,
+      }
+    }
+  }
+
+  function handleTouchMove(event: TouchEvent, containerElement: HTMLElement) {
+    if (event.touches.length === 2 && touchZoomState.value) {
+      event.preventDefault()
+
+      const touch1 = event.touches[0]
+      const touch2 = event.touches[1]
+      const currentDistance = getTouchDistance(touch1, touch2)
+      const scale = currentDistance / touchZoomState.value.initialDistance
+      const newZoom = touchZoomState.value.initialZoom * scale
+
+      // Clamp zoom value
+      const clampedZoom = Math.min(Math.max(newZoom, minZoom), maxZoom)
+
+      if (clampedZoom !== zoom.value) {
+        // Calculate current center point
+        const centerX = (touch1.clientX + touch2.clientX) / 2
+        const centerY = (touch1.clientY + touch2.clientY) / 2
+        const rect = containerElement.getBoundingClientRect()
+        const containerCenterX = rect.width / 2
+        const containerCenterY = rect.height / 2
+        const offsetX = centerX - rect.left - containerCenterX
+        const offsetY = centerY - rect.top - containerCenterY
+
+        // Calculate focal point in content coordinates
+        const contentFocalX = (touchZoomState.value.centerX - touchZoomState.value.initialTranslateX) / touchZoomState.value.initialZoom
+        const contentFocalY = (touchZoomState.value.centerY - touchZoomState.value.initialTranslateY) / touchZoomState.value.initialZoom
+
+        // Update zoom and translate
+        zoom.value = clampedZoom
+        translateX.value = offsetX - contentFocalX * clampedZoom
+        translateY.value = offsetY - contentFocalY * clampedZoom
+      }
+    }
+  }
+
+  function handleTouchEnd(event: TouchEvent) {
+    if (event.touches.length < 2) {
+      touchZoomState.value = null
+      isPinching.value = false
     }
   }
 
@@ -146,5 +236,9 @@ export function useZoom(options: UseZoomOptions = {}) {
     handleWheel,
     getState,
     setState,
+
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
   }
 }
