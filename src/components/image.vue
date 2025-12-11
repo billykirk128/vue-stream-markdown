@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import type { ControlsConfig } from '../types'
 import { computed, ref, toRefs, watch } from 'vue'
-import { useContext, useI18n, useMediumZoom } from '../composables'
+import { useContext, useControls, useI18n, useMediumZoom } from '../composables'
 import { saveImage } from '../utils'
 import Button from './button.vue'
 import Modal from './modal.vue'
@@ -12,9 +13,11 @@ const props = withDefaults(defineProps<{
   title?: string
   preview?: boolean
   margin?: number
+  controls?: ControlsConfig
 }>(), {
   preview: true,
-  margin: 0,
+  margin: 16,
+  controls: true,
 })
 
 const emits = defineEmits<{
@@ -22,10 +25,24 @@ const emits = defineEmits<{
   (e: 'error', event: Event): void
 }>()
 
-const { margin } = toRefs(props)
+const { margin, controls } = toRefs(props)
 
 const { t } = useI18n()
 const { icons } = useContext()
+const { isControlEnabled, getControlValue } = useControls({
+  controls,
+})
+
+const enableDownload = computed(() => isControlEnabled('image.download'))
+const enableFlip = computed(() => isControlEnabled('image.flip'))
+const enableRotate = computed(() => isControlEnabled('image.rotate'))
+
+const controlPosition = computed(() => {
+  const position = getControlValue('image.controlPosition')
+  if (typeof position === 'boolean')
+    return 'bottom-center'
+  return position || 'bottom-center'
+})
 
 const loaded = ref<boolean>(false)
 
@@ -35,6 +52,7 @@ const scaleY = ref<number>(1)
 const rotate = ref<number>(0)
 
 const {
+  isAnimating,
   elementRef,
   zoomElementRef: _zoomElementRef,
   elementStyle,
@@ -71,14 +89,16 @@ function handleOpen() {
   zoomIn()
 }
 
+function handleClose() {
+  if (isAnimating.value)
+    return
+  zoomOut()
+}
+
 function download() {
   if (!props.src)
     return
   saveImage(props.src, props.alt)
-}
-
-function handleClose() {
-  zoomOut()
 }
 
 function flipHorizontal() {
@@ -129,32 +149,36 @@ watch(open, (data) => {
     :modal-style="{
       backgroundColor: 'rgba(0, 0, 0, 0.45)',
     }"
+    :close="handleClose"
   >
     <ZoomContainer
-      position="bottom-center"
       control-size="large"
+      :position="controlPosition"
       :container-style="{
         width: 'auto',
+        maxWidth: `calc(100% - ${props.margin * 2}px)`,
         cursor: 'grab',
       }"
       @click="handleClose"
     >
-      <template #controls="props">
+      <template #controls="buttonProps">
         <Button
-          v-if="src"
-          v-bind="props"
+          v-if="src && enableDownload"
+          v-bind="buttonProps"
           :icon="icons.download"
           :name="t('button.download')"
           @click="download"
         />
         <Button
-          v-bind="props"
+          v-if="enableFlip"
+          v-bind="buttonProps"
           :icon="icons.flipHorizontal"
           :name="t('button.flipX')"
           @click="flipHorizontal"
         />
         <Button
-          v-bind="props"
+          v-if="enableFlip"
+          v-bind="buttonProps"
           :icon="icons.flipVertical || icons.flipHorizontal"
           :name="t('button.flipY')"
           :button-style="{
@@ -163,13 +187,15 @@ watch(open, (data) => {
           @click="flipVertical"
         />
         <Button
-          v-bind="props"
+          v-if="enableRotate"
+          v-bind="buttonProps"
           :icon="icons.rotateLeft"
           :name="t('button.rotateLeft')"
           @click="rotateLeft"
         />
         <Button
-          v-bind="props"
+          v-if="enableRotate"
+          v-bind="buttonProps"
           :icon="icons.rotateRight || icons.rotateLeft"
           :name="t('button.rotateRight')"
           :button-style="{
@@ -179,7 +205,13 @@ watch(open, (data) => {
         />
       </template>
 
-      <img ref="_zoomElementRef" :src="src" :alt="alt" :title="title" :style="imageStyle">
+      <img
+        ref="_zoomElementRef"
+        :src="src"
+        :alt="alt"
+        :title="title"
+        :style="imageStyle"
+      >
     </ZoomContainer>
   </Modal>
 </template>

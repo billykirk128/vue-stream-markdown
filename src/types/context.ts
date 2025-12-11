@@ -63,7 +63,11 @@ export type CodeControlsConfig
 export type ImageControlsConfig
   = | boolean
     | {
+      preview?: boolean
       download?: boolean
+      flip?: boolean
+      rotate?: boolean
+      controlPosition?: ZoomControlPosition
     }
 
 export type ZoomControlPosition

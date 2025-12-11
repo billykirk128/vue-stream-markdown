@@ -26,7 +26,8 @@ const fallbackAttempted = ref<boolean>(false)
 
 const isLoading = computed(() => props.node.loading || !props.node.url)
 
-const showDownload = computed(() => isControlEnabled('image.download'))
+const enableDownload = computed(() => isControlEnabled('image.download'))
+const enablePreview = computed(() => isControlEnabled('image.preview'))
 
 const fallback = computed(() => props.imageOptions?.fallback ?? '')
 
@@ -92,7 +93,7 @@ function handleMouseLeave() {
     <div data-stream-markdown="image-wrapper">
       <div v-if="!isHardenUrl" ref="maskRef" data-stream-markdown="image-mask">
         <Button
-          v-if="!isLoading && showDownload"
+          v-if="!isLoading && enableDownload"
           data-stream-markdown="image-download-button"
           :icon="icons.download"
           :name="t('button.download')"
@@ -114,7 +115,8 @@ function handleMouseLeave() {
         :src="transformedUrl"
         :alt="alt"
         :title="title"
-        :preview="!fallbackAttempted"
+        :preview="!fallbackAttempted && enablePreview"
+        :controls="controls"
         @load="handleLoaded"
         @error="handleError"
       />

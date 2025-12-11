@@ -19,7 +19,7 @@ console.log(message);
 `
 
 const imageExample = `
-![Placeholder Image](https://placehold.co/600x400 "Placeholder Image")
+![Placeholder Image](https://placehold.co/600x400)
 `
 
 const mermaidExample = `
@@ -86,9 +86,33 @@ const codeOnlyFullscreen = {
 }
 
 // Image controls examples
-const imageWithoutDownload = {
+const imageOnlyDownload = {
+  image: {
+    download: true,
+    flip: false,
+    rotate: false,
+  },
+}
+
+const imageOnlyFlip = {
   image: {
     download: false,
+    flip: true,
+    rotate: false,
+  },
+}
+
+const imageOnlyRotate = {
+  image: {
+    download: false,
+    flip: false,
+    rotate: true,
+  },
+}
+
+const imageTopRight = {
+  image: {
+    controlPosition: 'top-right',
   },
 }
 
@@ -123,7 +147,7 @@ The controls configuration allows you to enable or disable interactive controls 
 
 Configuration for interactive controls. Set to `false` to disable all controls, or configure specific control types. When configuring specific controls, you only need to specify the options you want to customize - other controls will remain enabled by default.
 
-### ControlsConfig Interface
+### Interface
 
 ```typescript
 type ControlsConfig
@@ -143,7 +167,7 @@ type ControlsConfig
 
 Controls for tables. Can be a boolean or an object with specific options.
 
-### TableControlsConfig Interface
+### Interface
 
 ```typescript
 type TableControlsConfig
@@ -219,7 +243,7 @@ const controls: ControlsConfig = {
 
 Controls for code blocks. Can be a boolean or an object with specific options.
 
-### CodeControlsConfig Interface
+### Interface
 
 ```typescript
 type CodeControlsConfig
@@ -363,43 +387,72 @@ const controls: ControlsConfig = {
 
 Controls for images. Can be a boolean or an object with specific options.
 
-### ImageControlsConfig Interface
+> **Note:** The `preview` control enables clicking on the image to open it in preview mode (zoomed/fullscreen). The `download` control appears when hovering over the image. Other controls (`flip`, `rotate`, and `controlPosition`) are only displayed when the image is opened in preview mode (zoomed/fullscreen).
+
+### Interface
 
 ```typescript
 type ImageControlsConfig
   = | boolean
     | {
+      preview?: boolean
       download?: boolean
+      flip?: boolean
+      rotate?: boolean
+      controlPosition?: ZoomControlPosition
     }
 ```
+
+### preview
+
+- **Type:** `boolean | undefined`
+- **Default:** `true`
+
+Enable preview functionality for images. When enabled, users can click on the image to open it in preview mode.
 
 ### download
 
 - **Type:** `boolean | undefined`
 - **Default:** `true`
 
-Enable download button for images. When enabled, a download button appears when hovering over the image, allowing users to download the image file.
+Enable download button for images. When enabled, a download button appears when hovering over the image, allowing users to download the image file. The download button is also displayed when the image is opened in preview mode (zoomed/fullscreen).
 
-**Image without download control:**
+**Only download button enabled:**
 
-<StreamMarkdown :content="imageExample" :controls="imageWithoutDownload" />
+<StreamMarkdown :content="imageExample" :controls="imageOnlyDownload" />
 
-```vue
-<script setup lang="ts">
-import type { ControlsConfig } from 'vue-stream-markdown'
-import { Markdown } from 'vue-stream-markdown'
+### flip
 
-const controls: ControlsConfig = {
-  image: {
-    download: true,
-  },
-}
-</script>
+- **Type:** `boolean | undefined`
+- **Default:** `true`
 
-<template>
-  <Markdown :content="content" :controls="controls" />
-</template>
-```
+Enable flip functionality for images. When enabled, users can flip the image horizontally or vertically. This control is only displayed when the image is opened in preview mode (zoomed/fullscreen).
+
+**Only flip control enabled:**
+
+<StreamMarkdown :content="imageExample" :controls="imageOnlyFlip" />
+
+### rotate
+
+- **Type:** `boolean | undefined`
+- **Default:** `true`
+
+Enable rotate functionality for images. When enabled, users can rotate the image in 90-degree increments. This control is only displayed when the image is opened in preview mode (zoomed/fullscreen).
+
+**Only rotate control enabled:**
+
+<StreamMarkdown :content="imageExample" :controls="imageOnlyRotate" />
+
+### controlPosition
+
+- **Type:** `ZoomControlPosition | undefined`
+- **Default:** `'bottom-center'`
+
+Position of the control buttons for images in preview mode. The control buttons include download, flip, rotate, and zoom controls.
+
+**Image with controls at top-right:**
+
+<StreamMarkdown :content="imageExample" :controls="imageTopRight" />
 
 ## mermaid
 
@@ -408,7 +461,7 @@ const controls: ControlsConfig = {
 
 Controls for Mermaid diagrams. Can be a boolean or an object with zoom options.
 
-### ZoomControlsConfig Interface
+### Interface
 
 ```typescript
 type ZoomControlsConfig

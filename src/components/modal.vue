@@ -10,6 +10,7 @@ const props = withDefaults(defineProps<{
   modalStyle?: CSSProperties
   headerStyle?: CSSProperties
   transition?: string
+  close?: () => void
 }>(), {
   zIndex: 1000,
   transition: 'modal',
@@ -31,8 +32,12 @@ const modalStyle = computed(() => ({
 const showHeader = computed(() => !!props.title || !!slots.title || !!slots.extra)
 
 useEventListener(document, 'keyup', (event) => {
-  if (event.key === 'Escape' || event.key === 'Esc')
-    open.value = false
+  if (event.key === 'Escape' || event.key === 'Esc') {
+    if (props.close)
+      props.close()
+    else
+      open.value = false
+  }
 })
 </script>
 

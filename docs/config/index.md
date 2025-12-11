@@ -160,11 +160,35 @@ Enable line numbers display for code blocks.
 
 Controls for images. Can be a boolean or an object with specific options.
 
+##### preview
+
+- **Type:** `boolean`
+
+Enable preview functionality for images. When enabled, users can click on the image to open it in preview mode (zoomed/fullscreen).
+
 ##### download
 
 - **Type:** `boolean`
 
 Enable download button for images.
+
+##### flip
+
+- **Type:** `boolean`
+
+Enable flip functionality for images.
+
+##### rotate
+
+- **Type:** `boolean`
+
+Enable rotate functionality for images.
+
+##### controlPosition
+
+- **Type:** `ZoomControlPosition`
+
+Position of the control buttons for images.
 
 #### mermaid
 

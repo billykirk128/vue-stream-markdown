@@ -44,10 +44,10 @@ const nodeRenderers = computed((): NodeRenderers => ({
   ...props.nodeRenderers,
 }))
 
-const icons = computed((): Record<IconName, Component> => ({
+const icons = computed(() => ({
   ...ICONS,
   ...props.icons,
-}))
+} as Record<IconName, Component>))
 
 function getContainer(): HTMLElement | undefined {
   return containerRef.value
