@@ -65,6 +65,7 @@ interface CodeOptions {
   languageIcon?: boolean
   languageName?: boolean
   lineNumbers?: boolean
+  maxHeight?: number | string
   /**
    * Language specific code options
    * Allows you to override display options for specific programming languages
@@ -117,6 +118,41 @@ Whether to display line numbers for code blocks. Line numbers are shown on the l
 **Only line numbers enabled:**
 
 <StreamMarkdown :content="codeExample" :code-options="lineNumbersOnly" />
+
+### maxHeight
+
+- **Type:** `number | string | undefined`
+- **Default:** `undefined` (no height limit)
+
+Maximum height for code block content. When the code content exceeds this height, the code block will become scrollable. This option only applies when viewing the source code (not in preview mode).
+
+- If a `number` is provided, it will be treated as pixels (e.g., `500` means `500px`)
+- If a `string` is provided, it can be any valid CSS height value (e.g., `'500px'`, `'50vh'`, `'10rem'`)
+
+You can set a global `maxHeight` for all code blocks, or override it for specific languages using the `language` option.
+
+```vue
+<script setup lang="ts">
+import type { CodeOptions } from 'vue-stream-markdown'
+import { Markdown } from 'vue-stream-markdown'
+
+const codeOptions: CodeOptions = {
+  maxHeight: 300, // Default max height for all code blocks
+  language: {
+    typescript: {
+      maxHeight: 500, // TypeScript code blocks can be taller
+    },
+    json: {
+      maxHeight: '20vh', // JSON code blocks use viewport height
+    },
+  },
+}
+</script>
+
+<template>
+  <Markdown :content="content" :code-options="codeOptions" />
+</template>
+```
 
 ### All Options Enabled (Default)
 
@@ -194,6 +230,7 @@ const codeOptions: CodeOptions = {
   languageIcon: true,
   languageName: true,
   lineNumbers: false, // Hide line numbers
+  maxHeight: 400, // Set max height to 400px
 }
 </script>
 

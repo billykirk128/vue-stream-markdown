@@ -130,6 +130,7 @@ export interface CodeOptions {
   languageIcon?: boolean
   languageName?: boolean
   lineNumbers?: boolean
+  maxHeight?: number | string
   /**
    * Language specific code options
    * @example

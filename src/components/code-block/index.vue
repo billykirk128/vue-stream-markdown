@@ -36,6 +36,8 @@ const CodeNode = defineAsyncComponent(() => import('../renderers/code/index.vue'
 
 const { controls, previewers, codeOptions } = toRefs(props)
 
+const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
+
 const { t } = useI18n()
 const { icons } = useContext()
 
@@ -43,8 +45,6 @@ const { isControlEnabled } = useControls({
   controls,
 })
 const { installed: hasMermaid } = useMermaid()
-
-const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
 
 const { onCopied } = useContext()
 const { copy, copied } = useClipboard({
@@ -134,6 +134,25 @@ const PreviewComponent = computed((): Component => {
     return data as Component
 
   return CODE_PREVIEWERS[language.value]
+})
+
+function normalizeHeight(height: string | number) {
+  return typeof height === 'number' ? `${height}px` : height
+}
+
+const maxHeight = computed((): string | undefined => {
+  if (mode.value === 'preview')
+    return undefined
+
+  const specific = codeOptions.value?.language?.[language.value]?.maxHeight
+  if (specific)
+    return normalizeHeight(specific)
+
+  const height = codeOptions.value?.maxHeight
+  if (height)
+    return normalizeHeight(height)
+
+  return undefined
 })
 
 const downloadOptions = computed(() => {
@@ -255,7 +274,7 @@ watch(
       </slot>
     </header>
 
-    <main v-show="!collapsed" data-stream-markdown="code-block-content">
+    <main v-show="!collapsed" data-stream-markdown="code-block-content" :style="{ maxHeight }">
       <component
         :is="PreviewComponent"
         v-if="previewable"

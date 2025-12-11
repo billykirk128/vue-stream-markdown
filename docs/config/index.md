@@ -358,6 +358,12 @@ Whether to display language names for code blocks.
 
 Whether to display line numbers for code blocks.
 
+#### maxHeight
+
+- **Type:** `number | string`
+
+Maximum height for code block content. When the code content exceeds this height, the code block will become scrollable. If a number is provided, it will be treated as pixels. If a string is provided, it can be any valid CSS height value (e.g., `'500px'`, `'50vh'`).
+
 #### language
 
 - **Type:** `Record<string, CodeOptions> | undefined`
