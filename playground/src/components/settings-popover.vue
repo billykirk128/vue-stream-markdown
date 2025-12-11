@@ -44,6 +44,7 @@ const BLOCK_TITLE_CLASSES = [
 ]
 
 const LABEL_CLASSES = [
+  'text-muted-foreground',
   'font-semibold',
   'shrink-0',
   'w-28',

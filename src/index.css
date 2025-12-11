@@ -145,15 +145,6 @@
   flex-shrink: 0;
   padding-inline: 1rem;
   padding-block: 0.5rem;
-  background-color: color-mix(in oklab, var(--muted) 80%, transparent);
-  color: var(--muted-foreground);
-  border-bottom: 1px solid var(--border);
-}
-
-.stream-markdown [data-stream-markdown='modal-actions'] {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .stream-markdown [data-stream-markdown='modal-body'] {
@@ -616,27 +607,13 @@
 .stream-markdown .modal-enter-from,
 .stream-markdown .modal-leave-to {
   opacity: 0;
+  transform: scale(0.95);
 }
 .stream-markdown .modal-enter-active,
 .stream-markdown .modal-leave-active {
-  transition: opacity var(--default-transition-duration) ease;
-}
-
-.stream-markdown .img-switch-enter-active,
-.stream-markdown .img-switch-leave-active {
   transition:
     opacity var(--default-transition-duration) ease,
     transform var(--default-transition-duration) ease;
-}
-.stream-markdown .img-switch-enter-from,
-.stream-markdown .img-switch-leave-to {
-  opacity: 0;
-  transform: translateY(6px);
-}
-.stream-markdown .img-switch-enter-to,
-.stream-markdown .img-switch-leave-from {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 @keyframes spin {

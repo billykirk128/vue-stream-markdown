@@ -1,5 +1,3 @@
-declare module 'vue-stream-markdown'
-
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'
 

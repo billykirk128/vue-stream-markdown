@@ -23,8 +23,8 @@ const { placement, delay, trigger } = toRefs(props)
 const { getContainer } = useContext()
 
 const {
-  referenceEl,
-  floatingEl,
+  referenceEl: _referenceEl,
+  floatingEl: _floatingEl,
   open,
   appendTo,
   floatingStyle,
@@ -48,7 +48,7 @@ defineExpose({ show, hide })
 <template>
   <span
     v-bind="$attrs"
-    ref="referenceEl"
+    ref="_referenceEl"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
     @click="onClick"
@@ -59,7 +59,7 @@ defineExpose({ show, hide })
   <Teleport :to="appendTo">
     <div
       v-if="open"
-      ref="floatingEl"
+      ref="_floatingEl"
       :style="floatingStyle"
       data-stream-markdown="tooltip"
       @mouseenter="onFloatingEnter"

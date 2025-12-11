@@ -1,6 +1,7 @@
 import antfu from '@antfu/eslint-config'
 
 export default antfu({
+  pnpm: false,
   unocss: true,
   formatters: {
     html: true,

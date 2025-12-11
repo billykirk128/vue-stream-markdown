@@ -42,7 +42,7 @@ function onSelect(item: SelectItem) {
     </button>
 
     <template #content>
-      <div class="py-2 flex flex-col gap-1">
+      <div class="p-2 flex flex-col gap-1">
         <button
           v-for="item in options"
           :key="item.value"

@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import type { CSSProperties } from 'vue'
 import { computed, useSlots } from 'vue'
 
 const props = withDefaults(defineProps<{
   title?: string
-  closable?: boolean
   zIndex?: number
+  headerStyle?: CSSProperties
   getContainer?: () => HTMLElement | undefined
 }>(), {
   zIndex: 1000,
@@ -19,23 +20,21 @@ const container = props.getContainer ? props.getContainer() || 'body' : 'body'
 const modalStyle = computed(() => ({
   zIndex: props.zIndex,
 }))
-const showHeader = computed(() => !!props.title || props.closable || !!slots.title || !!slots.extra)
+const showHeader = computed(() => !!props.title || !!slots.title || !!slots.extra)
 </script>
 
 <template>
   <teleport :to="container">
     <Transition name="modal" appear>
       <div v-if="open" data-stream-markdown="modal" :style="modalStyle">
-        <header v-if="showHeader" data-stream-markdown="modal-header">
+        <header v-if="showHeader" data-stream-markdown="modal-header" :style="headerStyle">
           <slot name="title">
             {{ title }}
           </slot>
           <slot name="header-center">
             <div />
           </slot>
-          <div data-stream-markdown="modal-actions">
-            <slot name="actions" />
-          </div>
+          <slot name="actions" />
         </header>
         <main data-stream-markdown="modal-body">
           <slot />

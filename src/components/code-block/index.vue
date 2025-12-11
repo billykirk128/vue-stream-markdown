@@ -264,6 +264,11 @@ watch(
 
     <Modal
       v-model:open="fullscreen"
+      :header-style="{
+        backgroundColor: 'color-mix(in oklab, var(--muted) 80%, transparent)',
+        color: 'var(--muted-foreground)',
+        borderBottom: '1px solid var(--border)',
+      }"
       :get-container="props.getContainer"
     >
       <template #title>

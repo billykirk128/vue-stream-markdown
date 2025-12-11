@@ -157,34 +157,32 @@ function handleMouseLeave() {
 
       <Spin v-if="(isLoading || !imageLoaded) && !isHardenUrl" />
 
-      <Transition name="img-switch" mode="out-in">
-        <img
-          v-if="!isLoading && !isHardenUrl && typeof transformedUrl === 'string'"
-          ref="imgRef"
-          :key="transformedUrl"
-          data-stream-markdown="image"
-          :src="transformedUrl"
-          :alt="alt"
-          :title="title"
-          :style="{
-            opacity: isLoading ? 0 : 1,
-            cursor: isLoading ? 'default' : 'pointer',
-          }"
-          loading="lazy"
-          decoding="async"
-          data-zoomable
-          @load="handleLoaded"
-          @error="handleError"
-        >
-        <component
-          :is="Error"
-          v-else-if="isHardenUrl || loadError"
-          :variant="isHardenUrl ? 'harden-image' : 'image'"
-          v-bind="props"
-        >
-          {{ title }}
-        </component>
-      </transition>
+      <img
+        v-if="!isLoading && !isHardenUrl && typeof transformedUrl === 'string'"
+        ref="imgRef"
+        :key="transformedUrl"
+        data-stream-markdown="image"
+        :src="transformedUrl"
+        :alt="alt"
+        :title="title"
+        :style="{
+          opacity: isLoading ? 0 : 1,
+          cursor: isLoading ? 'default' : 'pointer',
+        }"
+        loading="lazy"
+        decoding="async"
+        data-zoomable
+        @load="handleLoaded"
+        @error="handleError"
+      >
+      <component
+        :is="Error"
+        v-else-if="isHardenUrl || loadError"
+        :variant="isHardenUrl ? 'harden-image' : 'image'"
+        v-bind="props"
+      >
+        {{ title }}
+      </component>
     </div>
 
     <figcaption v-if="showCaption && title" data-stream-markdown="image-caption">
