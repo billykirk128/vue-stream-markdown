@@ -31,11 +31,11 @@ export function preprocess(content: string): string {
     fixStrong,
     fixEmphasis,
     fixDelete,
-    fixLink,
     fixCode,
+    fixTaskList,
+    fixLink,
     fixTable,
     fixInlineMath,
-    fixTaskList,
     remend,
   ])(content)
 }

@@ -93,14 +93,44 @@ const preprocess = flow([
 The following functions are available for use in `preprocess`:
 
 - `fixFootnote`: Removes incomplete footnote references (`[^label]`) that don't have corresponding definitions (`[^label]:`)
-- `fixStrong`: Completes incomplete strong syntax (`**bold**`)
-- `fixEmphasis`: Completes incomplete emphasis syntax (`*italic*`)
+- `fixStrong`: Completes incomplete strong syntax (`**bold**`). Also removes standalone list markers (`- `) left after removing incomplete `**` to prevent parsing issues
+- `fixEmphasis`: Completes incomplete emphasis syntax (`*italic*`). Also removes standalone list markers (`- `) left after removing incomplete `*` to prevent parsing issues
 - `fixDelete`: Completes incomplete strikethrough syntax (`~~deleted~~`)
+- `fixTaskList`: Removes incomplete task list syntax (`- [`) and standalone dashes (`-`) that could cause parsing issues. **Must run before `fixLink`** to prevent `- [` from being treated as an incomplete link
 - `fixLink`: Completes incomplete link syntax (`[text](url)`) and removes trailing standalone brackets (`[`) without content
 - `fixCode`: Completes incomplete code block syntax (```code```)
 - `fixTable`: Completes incomplete table syntax
 - `fixInlineMath`: Completes incomplete inline math syntax (`$math$`)
 - `remend`: Intelligently parses and completes incomplete Markdown syntax blocks (from [remend](https://github.com/vercel/streamdown/tree/main/packages/remend), a library from the [streamdown](https://streamdown.ai/) project). It automatically detects and completes unterminated syntax, providing the foundation for streaming-friendly Markdown parsing
+
+::: danger ⚠️ Important: Execution Order
+The order of preprocess functions is **critical** to prevent parsing conflicts. The default order is:
+:::
+
+```typescript
+flow([
+  fixFootnote,
+  fixStrong,
+  fixEmphasis,
+  fixDelete,
+  fixTaskList, // Must run before fixLink
+  fixLink,
+  fixCode,
+  fixTable,
+  fixInlineMath,
+  remend,
+])
+```
+
+**Key ordering rules:**
+
+- **`fixTaskList` must run before `fixLink`**: This prevents incomplete task list syntax like `- [` from being misinterpreted as an incomplete link marker. If `fixLink` runs first, it will remove the `[`, leaving `- ` which could be parsed as a setext heading underline.
+
+- **`fixStrong` and `fixEmphasis` should run early**: These functions clean up not only `**` and `*`, but also any standalone list markers (`- `) left behind, preventing them from causing parsing issues in later stages.
+
+- **`remend` should run last**: It acts as a final catch-all for any remaining incomplete syntax.
+
+If you customize the preprocess pipeline, ensure you maintain these ordering rules to avoid parsing conflicts.
 
 ## postNormalize
 

@@ -111,8 +111,75 @@ describe('fixTaskList', () => {
     expect(fixTaskList(content)).toBe(expected)
   })
 
-  it('should not remove dash that is part of task list syntax', () => {
-    expect(fixTaskList('- [ ] Task 1\n- [')).toBe('- [ ] Task 1\n- [')
+  it('should remove incomplete task list item with opening bracket', () => {
+    expect(fixTaskList('- [ ] Task 1\n- [')).toBe('- [ ] Task 1\n')
+  })
+
+  it('should remove incomplete task list item with opening bracket and whitespace', () => {
+    expect(fixTaskList('- [ ] Task 1\n- [ ')).toBe('- [ ] Task 1\n')
+  })
+
+  it('should remove incomplete nested task list item', () => {
+    const content = `- [ ] Phase 1: Setup
+
+  - [`
+    const expected = `- [ ] Phase 1: Setup
+
+`
+    expect(fixTaskList(content)).toBe(expected)
+  })
+
+  it('should remove incomplete nested task list item (exact user scenario)', () => {
+    // This is the exact scenario from the user: nested task list with empty lines
+    const content = `### Nested Task Lists
+
+
+
+Task lists can be nested:
+
+
+
+- [ ] Phase 1: Setup
+
+  - [`
+    const expected = `### Nested Task Lists
+
+
+
+Task lists can be nested:
+
+
+
+- [ ] Phase 1: Setup
+
+`
+    expect(fixTaskList(content)).toBe(expected)
+  })
+
+  it('should remove incomplete task list item without space between dash and bracket', () => {
+    const content = `- [ ] Phase 1: Setup
+
+  -[`
+    const expected = `- [ ] Phase 1: Setup
+
+`
+    expect(fixTaskList(content)).toBe(expected)
+  })
+
+  it('should remove incomplete task list item in quote block', () => {
+    const content = `> **Note**: Here's a quote with tasks:
+> - [`
+    const expected = `> **Note**: Here's a quote with tasks:
+`
+    expect(fixTaskList(content)).toBe(expected)
+  })
+
+  it('should remove incomplete nested task list item in quote block', () => {
+    const content = `> - [ ] Task 1
+>   - [`
+    const expected = `> - [ ] Task 1
+`
+    expect(fixTaskList(content)).toBe(expected)
   })
 
   it('should handle multiple paragraphs with standalone dash at end', () => {

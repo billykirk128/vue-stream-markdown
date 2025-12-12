@@ -1,4 +1,4 @@
-import { doubleAsteriskPattern, doubleUnderscorePattern } from './pattern'
+import { doubleAsteriskPattern, doubleUnderscorePattern, trailingStandaloneDashWithNewlinesPattern } from './pattern'
 
 /**
  * Fix unclosed strong (** or __) syntax in streaming markdown
@@ -55,11 +55,19 @@ export function fixStrong(content: string): string {
     const afterLast = lastParagraph.substring(lastStarPos + 2).trim()
 
     // If there's content after **, complete it
-    if (afterLast.length > 0)
+    if (afterLast.length > 0) {
       return `${content}**`
-    else
+    }
+    else {
       // Remove the trailing ** to avoid showing it as plain text
-      return content.slice(0, -2)
+      let result = content.slice(0, -2)
+      // If after removing **, we're left with a line ending in `- ` or `-\t`, remove the standalone dash line
+      // This prevents leaving standalone list markers that could cause parsing issues
+      if (trailingStandaloneDashWithNewlinesPattern.test(result)) {
+        result = result.replace(trailingStandaloneDashWithNewlinesPattern, '$1')
+      }
+      return result
+    }
   }
 
   // If no asterisk strong to complete, check underscore strong formatting
@@ -75,11 +83,19 @@ export function fixStrong(content: string): string {
     const afterLast = lastParagraph.substring(lastUnderscorePos + 2).trim()
 
     // If there's content after __, complete it
-    if (afterLast.length > 0)
+    if (afterLast.length > 0) {
       return `${content}__`
-    else
+    }
+    else {
       // Remove the trailing __ to avoid showing it as plain text
-      return content.slice(0, -2)
+      let result = content.slice(0, -2)
+      // If after removing __, we're left with a line ending in `- ` or `-\t`, remove the standalone dash line
+      // This prevents leaving standalone list markers that could cause parsing issues
+      if (trailingStandaloneDashWithNewlinesPattern.test(result)) {
+        result = result.replace(trailingStandaloneDashWithNewlinesPattern, '$1')
+      }
+      return result
+    }
   }
 
   return content

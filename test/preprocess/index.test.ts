@@ -69,4 +69,74 @@ describe('preprocess', () => {
     expect(preprocess('```js\ncode\n```\n\n**bold text'))
       .toBe('```js\ncode\n```\n\n**bold text**')
   })
+
+  it('should remove incomplete nested task list item', () => {
+    const content = `### Nested Task Lists
+
+
+
+Task lists can be nested:
+
+
+
+- [ ] Phase 1: Setup
+
+  - [`
+    const expected = `### Nested Task Lists
+
+
+
+Task lists can be nested:
+
+
+
+- [ ] Phase 1: Setup
+
+`
+    expect(preprocess(content)).toBe(expected)
+  })
+
+  it('should remove incomplete task list items at end', () => {
+    expect(preprocess('- [ ] Task 1\n- [')).toBe('- [ ] Task 1\n')
+  })
+
+  it('should remove standalone dash at end', () => {
+    expect(preprocess('- [ ] Task 1\n-')).toBe('- [ ] Task 1\n')
+  })
+
+  it('should remove incomplete ** at end of list item', () => {
+    const content = `### Table Features
+
+
+
+Streamdown enhances tables with:
+
+- **`
+    const expected = `### Table Features
+
+
+
+Streamdown enhances tables with:
+
+`
+    expect(preprocess(content)).toBe(expected)
+  })
+
+  it('should remove incomplete * at end of list item', () => {
+    const content = `### Table Features
+
+
+
+Streamdown enhances tables with:
+
+- *`
+    const expected = `### Table Features
+
+
+
+Streamdown enhances tables with:
+
+`
+    expect(preprocess(content)).toBe(expected)
+  })
 })

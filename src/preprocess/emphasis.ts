@@ -1,4 +1,4 @@
-import { doubleAsteriskPattern, doubleUnderscorePattern, singleAsteriskPattern, singleUnderscorePattern } from './pattern'
+import { doubleAsteriskPattern, doubleUnderscorePattern, singleAsteriskPattern, singleUnderscorePattern, trailingStandaloneDashWithNewlinesPattern } from './pattern'
 
 /**
  * Fix unclosed emphasis (* or _) syntax in streaming markdown
@@ -31,11 +31,19 @@ export function fixEmphasis(content: string): string {
     const lastStarPos = withoutDoubleAsterisk.lastIndexOf('*')
     const afterLast = withoutDoubleAsterisk.substring(lastStarPos + 1).trim()
 
-    if (afterLast.length > 0)
+    if (afterLast.length > 0) {
       return `${content}*`
-    else
+    }
+    else {
       // Remove the trailing * to avoid showing it as plain text
-      return content.slice(0, -1)
+      let result = content.slice(0, -1)
+      // If after removing *, we're left with a line ending in `- ` or `-\t`, remove the standalone dash line
+      // This prevents leaving standalone list markers that could cause parsing issues
+      if (trailingStandaloneDashWithNewlinesPattern.test(result)) {
+        result = result.replace(trailingStandaloneDashWithNewlinesPattern, '$1')
+      }
+      return result
+    }
   }
 
   // If no asterisk emphasis to complete, check underscore emphasis
@@ -49,11 +57,19 @@ export function fixEmphasis(content: string): string {
     const lastUnderscorePos = withoutDoubleUnderscore.lastIndexOf('_')
     const afterLast = withoutDoubleUnderscore.substring(lastUnderscorePos + 1).trim()
 
-    if (afterLast.length > 0)
+    if (afterLast.length > 0) {
       return `${content}_`
-    else
+    }
+    else {
       // Remove the trailing _ to avoid showing it as plain text
-      return content.slice(0, -1)
+      let result = content.slice(0, -1)
+      // If after removing _, we're left with a line ending in `- ` or `-\t`, remove the standalone dash line
+      // This prevents leaving standalone list markers that could cause parsing issues
+      if (trailingStandaloneDashWithNewlinesPattern.test(result)) {
+        result = result.replace(trailingStandaloneDashWithNewlinesPattern, '$1')
+      }
+      return result
+    }
   }
 
   return content
