@@ -4,14 +4,14 @@ import { computed, unref } from 'vue'
 import { DEFAULT_HARDEN_OPTIONS } from '../constants'
 import { transformUrl } from '../utils'
 
-interface UseHardenSanitizersOptions {
+interface UseSanitizersOptions {
   url?: MaybeRef<string | undefined>
   hardenOptions?: MaybeRef<HardenOptions | undefined>
   loading?: MaybeRef<boolean | undefined>
   isImage?: MaybeRef<boolean | undefined>
 }
 
-export function useHardenSanitizers(options: UseHardenSanitizersOptions) {
+export function useSanitizers(options: UseSanitizersOptions) {
   const hardenOptions = computed(() => unref(options.hardenOptions) ?? DEFAULT_HARDEN_OPTIONS)
   const loading = computed(() => unref(options.loading) ?? false)
 
@@ -27,7 +27,7 @@ export function useHardenSanitizers(options: UseHardenSanitizersOptions) {
   const transformedUrl = computed(() => transformHardenUrl(url.value))
   const isHardenUrl = computed(() => transformedUrl.value === null)
 
-  function transformHardenUrl(url: string) {
+  function transformHardenUrl(url: string): string | null {
     if (!url || loading.value)
       return url
 

@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import Markdown from '~icons/catppuccin/markdown'
 import { version } from '../../../package.json'
-import { isMobile } from '../composable'
 </script>
 
 <template>
-  <div class="flex gap-2">
-    <Markdown v-if="!isMobile" :height="28" :width="28" />
+  <div class="px-2 flex gap-2">
     <h1 class="text-lg font-bold">
       Vue Stream Markdown
     </h1>

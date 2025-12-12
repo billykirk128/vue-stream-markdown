@@ -105,7 +105,7 @@ export function useFloatingElement(options: UseFloatingElementOptions) {
   }
 
   function handleClickOutside(event: MouseEvent) {
-    if (trigger.value !== 'click' || !open.value)
+    if (!open.value)
       return
 
     const target = event.target as Node

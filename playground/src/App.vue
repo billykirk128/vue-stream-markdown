@@ -183,7 +183,7 @@ initContent()
     class="vue-stream-markdown"
   >
     <template #actions>
-      <div class="flex gap-2 items-center lg:gap-4">
+      <div class="flex flex-col gap-2 items-center md:flex-row md:gap-4">
         <Title />
         <PresetSelect @select="changePresetContent" />
       </div>

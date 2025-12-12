@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ControlsConfig, ImageNode } from '../types'
+import type { ControlsConfig, ImageNode, ParsedNode } from '../types'
 import { useCycleList } from '@vueuse/core'
 import { treeFlatFilter } from 'treechop'
 import { computed, ref, toRefs, watch } from 'vue'
@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<{
   preview?: boolean
   margin?: number
   controls?: ControlsConfig
+  transformHardenUrl?: (url: string) => string | null
 }>(), {
   preview: true,
   margin: 16,
@@ -36,11 +37,13 @@ const { isControlEnabled, getControlValue } = useControls({
 })
 
 const imageNodes = computed(
-  () => treeFlatFilter(parsedNodes.value, node => node.type === 'image' && !node.loading),
+  () => treeFlatFilter(parsedNodes.value, (node: ParsedNode) => node.type === 'image' && !node.loading),
 )
-const imageList = computed(() => [
-  ...new Set(imageNodes.value.map(node => (node as ImageNode).url)),
-])
+// Make sure the image list is unique and filtered by the security checks
+const imageList = computed(() => {
+  const data = [...new Set(imageNodes.value.map((node: ParsedNode) => (node as ImageNode).url))]
+  return data.filter(url => props.transformHardenUrl ? props.transformHardenUrl(url) : url).filter(Boolean)
+})
 const { state: imageSrc, prev, next } = useCycleList(imageList, {
   initialValue: props.src,
   fallbackIndex: 0,

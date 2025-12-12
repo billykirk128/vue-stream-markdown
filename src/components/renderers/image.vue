@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ImageNodeRendererProps } from '../../types'
 import { computed, ref, toRefs } from 'vue'
-import { useContext, useControls, useHardenSanitizers, useI18n } from '../../composables'
+import { useContext, useControls, useI18n, useSanitizers } from '../../composables'
 import { saveImage } from '../../utils'
 import Button from '../button.vue'
 import ErrorComponent from '../error-component.vue'
@@ -33,7 +33,7 @@ const fallback = computed(() => props.imageOptions?.fallback ?? '')
 
 const imageSrc = computed(() => fallbackAttempted.value && fallback.value ? fallback.value : props.node.url)
 
-const { transformedUrl, isHardenUrl } = useHardenSanitizers({
+const { transformedUrl, isHardenUrl, transformHardenUrl } = useSanitizers({
   url: imageSrc,
   hardenOptions,
   loading: isLoading,
@@ -117,6 +117,7 @@ function handleMouseLeave() {
         :title="title"
         :preview="!fallbackAttempted && enablePreview"
         :controls="controls"
+        :transform-harden-url="transformHardenUrl"
         @load="handleLoaded"
         @error="handleError"
       />

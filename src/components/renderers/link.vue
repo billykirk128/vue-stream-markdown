@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { LinkNodeRendererProps } from '../../types'
 import { computed, toRefs } from 'vue'
-import { useHardenSanitizers } from '../../composables'
+import { useSanitizers } from '../../composables'
 import ErrorComponent from '../error-component.vue'
 import NodeList from '../node-list.vue'
 
@@ -16,7 +16,7 @@ const loading = computed(
     || !url.value,
 )
 
-const { transformedUrl, isHardenUrl } = useHardenSanitizers({
+const { transformedUrl, isHardenUrl } = useSanitizers({
   url,
   hardenOptions,
   loading,
