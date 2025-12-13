@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Action, ParsedNode, SelectItem, TableNodeRendererProps } from '../../types'
+import type { Control, ParsedNode, SelectOption, TableNodeRendererProps } from '../../types'
 import { useClipboard } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useContext, useControls, useI18n } from '../../composables'
@@ -24,7 +24,7 @@ const { copy, copied } = useClipboard({
   legacy: true,
 })
 
-const { isControlEnabled } = useControls({
+const { isControlEnabled, resolveControls } = useControls({
   controls: props.controls,
 })
 
@@ -62,20 +62,20 @@ function getTableContent(format: 'csv' | 'tsv' | 'markdown'): {
   }
 }
 
-const options: SelectItem[] = [
+const options: SelectOption[] = [
   { label: 'CSV', value: 'csv' },
   { label: 'TSV', value: 'tsv' },
   { label: 'Markdown', value: 'markdown' },
 ]
 
-const actions = computed((): Action[] => [
+const builtinControls = computed((): Control[] => [
   {
     name: t('button.copy'),
     key: 'copy',
     icon: copied.value ? 'check' : 'copy',
     options,
     visible: () => showCopy.value,
-    onClick: (_event: MouseEvent, item?: SelectItem) => {
+    onClick: (_event: MouseEvent, item?: SelectOption) => {
       const format = (item?.value || 'csv') as 'csv' | 'tsv'
       const data = getTableContent(format)
       if (!data)
@@ -91,7 +91,7 @@ const actions = computed((): Action[] => [
     icon: 'download',
     options,
     visible: () => showDownload.value,
-    onClick: (_event: MouseEvent, item?: SelectItem) => {
+    onClick: (_event: MouseEvent, item?: SelectOption) => {
       const format = (item?.value || 'csv') as 'csv' | 'tsv'
       const data = getTableContent(format)
       if (!data)
@@ -99,7 +99,11 @@ const actions = computed((): Action[] => [
       save(`table.${data.extension}`, data.content, data.mimeType)
     },
   },
-].filter(item => item.visible()))
+])
+
+const controls = computed(
+  () => resolveControls<TableNodeRendererProps>('table', builtinControls.value, props),
+)
 
 function getNodes(cell: unknown) {
   return [cell] as ParsedNode[]
@@ -110,11 +114,9 @@ function getNodes(cell: unknown) {
   <div data-stream-markdown="table-wrapper">
     <div data-stream-markdown="table-controls">
       <Button
-        v-for="item in actions"
+        v-for="item in controls"
+        v-bind="item"
         :key="item.key"
-        :name="item.name"
-        :icon="item.icon"
-        :options="item.options"
         @click="item.onClick"
       />
     </div>

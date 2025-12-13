@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Action, ControlsConfig, ImageNode, ParsedNode } from '../types'
+import type { Control, ControlsConfig, ImageNode, ImageNodeRendererProps, ParsedNode } from '../types'
 import { useCycleList } from '@vueuse/core'
 import { treeFlatFilter } from 'treechop'
 import { computed, ref, toRefs, watch } from 'vue'
@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<{
   margin?: number
   controls?: ControlsConfig
   transformHardenUrl?: (url: string) => string | null
+  nodeProps: ImageNodeRendererProps
 }>(), {
   preview: true,
   margin: 16,
@@ -32,7 +33,7 @@ const { margin, controls } = toRefs(props)
 
 const { t } = useI18n()
 const { icons, parsedNodes } = useContext()
-const { isControlEnabled, getControlValue } = useControls({
+const { isControlEnabled, getControlValue, resolveControls } = useControls({
   controls,
 })
 
@@ -91,7 +92,7 @@ const imageStyle = computed(() => ({
   ...elementStyle.value,
 }))
 
-const actions = computed((): Action[] => [
+const builtinControls = computed((): Control[] => [
   {
     key: 'download',
     icon: 'download',
@@ -150,7 +151,11 @@ const actions = computed((): Action[] => [
       : { transform: 'scaleX(-1)' },
     visible: () => enableRotate.value,
   },
-].filter(action => !action.visible || action.visible()))
+])
+
+const zoomControls = computed(
+  () => resolveControls<ImageNodeRendererProps>('image', builtinControls.value, props.nodeProps),
+)
 
 function handleLoad(event: Event) {
   loaded.value = true
@@ -245,13 +250,10 @@ watch(open, (data) => {
     >
       <template #controls="buttonProps">
         <Button
-          v-for="action in actions"
-          :key="action.key"
-          v-bind="buttonProps"
-          :icon="action.icon"
-          :name="action.name"
-          :button-style="action.buttonStyle"
-          @click="action.onClick"
+          v-for="item in zoomControls"
+          v-bind="{ ...buttonProps, ...item }"
+          :key="item.key"
+          @click="item.onClick"
         />
       </template>
 
