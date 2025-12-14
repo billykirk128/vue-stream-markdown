@@ -13,10 +13,8 @@ export interface UserConfig {
   typedDelay: number
   showInputEditor: boolean
   showAstResult: boolean
-
   shikiLightTheme: BuiltinTheme
   shikiDarkTheme: BuiltinTheme
-
   mermaidLightTheme: string
   mermaidDarkTheme: string
 }
@@ -29,4 +27,10 @@ export interface IconButtonProps {
   variant?: 'default' | 'toggle'
   placement?: 'top' | 'bottom'
   defaultActive?: boolean
+}
+
+export interface Action extends IconButtonProps {
+  key: string
+  onClick: (e: MouseEvent) => void
+  visible?: () => boolean
 }
