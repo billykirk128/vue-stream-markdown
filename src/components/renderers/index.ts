@@ -11,6 +11,7 @@ export const NODE_RENDERERS: NodeRenderers = {
   footnoteDefinition: defineAsyncComponent(() => import('./footnote-definition.vue')),
   footnoteReference: defineAsyncComponent(() => import('./footnote-reference.vue')),
   heading: defineAsyncComponent(() => import('./heading.vue')),
+  html: defineAsyncComponent(() => import('./html.vue')),
   image: defineAsyncComponent(() => import('./image.vue')),
   inlineCode: defineAsyncComponent(() => import('./inline-code.vue')),
   inlineMath: defineAsyncComponent(() => import('./inline-math.vue')),

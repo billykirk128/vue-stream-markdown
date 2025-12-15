@@ -21,12 +21,8 @@ export default defineConfig([
     ],
     copy: [
       {
-        from: './src/index.css',
-        to: './dist/index.css',
-      },
-      {
-        from: './src/theme.css',
-        to: './dist/theme.css',
+        from: ['./src/index.css', './src/theme.css'],
+        to: './dist',
       },
     ],
   },
