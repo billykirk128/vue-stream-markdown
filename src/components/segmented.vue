@@ -20,10 +20,14 @@ const modelValue = defineModel<string>('value', { required: false, default: '' }
 if (props.options.length && !modelValue.value)
   modelValue.value = props.options[0]!.value
 
+function isButtonActive(item: SelectOption) {
+  return modelValue.value === item.value
+}
+
 function getButtonStyle(item: SelectOption) {
   return {
     paddingBlock: '0.25rem',
-    backgroundColor: modelValue.value === item.value ? 'var(--accent)' : undefined,
+    backgroundColor: isButtonActive(item) ? 'var(--accent)' : undefined,
     ...props.buttonStyle,
   }
 }
@@ -43,6 +47,7 @@ function onClick(item: SelectOption) {
       :icon="item.icon"
       :name="item.label"
       :button-style="getButtonStyle(item)"
+      :data-active="isButtonActive(item)"
       @click="() => onClick(item)"
     />
   </div>

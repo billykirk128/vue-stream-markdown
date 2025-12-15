@@ -10,10 +10,12 @@ defineOptions({
 
 const props = withDefaults(defineProps<{
   variant?: ErrorVariant
+  showIcon?: boolean
   icon?: string | Component
   message?: string
 }>(), {
   variant: 'vanilla',
+  showIcon: true,
 })
 
 type ErrorVariant = 'vanilla' | 'image' | 'mermaid' | 'katex' | 'harden-image' | 'harden-link'
@@ -50,7 +52,7 @@ const isHarden = computed(() => props.variant?.startsWith?.('harden-'))
 
 <template>
   <span data-stream-markdown="error-component">
-    <div data-stream-markdown="error-component-icon">
+    <div v-if="showIcon" data-stream-markdown="error-component-icon">
       <Icon v-if="typeof icon === 'string'" :icon="icon" />
       <component :is="icon" v-else />
     </div>

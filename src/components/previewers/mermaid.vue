@@ -33,7 +33,10 @@ const controlPosition = computed((): ZoomControlPosition | undefined => {
 })
 
 const renderFlag = ref<boolean>(false)
+const renderAttempt = ref<boolean>(false)
+
 const svg = ref<string>()
+const error = ref<string>()
 const containerRef = ref<HTMLDivElement>()
 
 const code = computed(() => props.node.value.trim())
@@ -113,12 +116,15 @@ function updateHeight() {
 const render = throttle(
   props.throttle,
   async () => {
-    const data = await renderMermaid(code.value)
-    if (data) {
+    const { valid, svg: data, error: err } = await renderMermaid(code.value)
+    if (valid) {
       svg.value = data
       nextTick(() => {
         updateHeight()
       })
+    }
+    else {
+      error.value = err
     }
     renderFlag.value = true
   },
@@ -142,10 +148,16 @@ watch(
 watch(
   loading,
   (curr, prev) => {
+    if (renderAttempt.value)
+      return
+
     // if loading changed from true to false, set `renderFla` to false
     // avoid render error component when svg is not rendered yet
-    if (!curr && prev)
+    if (!curr && prev) {
+      renderAttempt.value = true
       renderFlag.value = false
+      render()
+    }
   },
   { immediate: true },
 )
@@ -173,6 +185,8 @@ if (!props.containerHeight) {
         v-else
         variant="mermaid"
         v-bind="props"
+        :message="error"
+        :show-icon="false"
       />
     </template>
 

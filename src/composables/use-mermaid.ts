@@ -46,34 +46,40 @@ export function useMermaid(options?: UseMermaidOptions) {
     return `${themeCode}${code}`
   }
 
-  async function parseMermaid(code: string): Promise<boolean> {
+  async function parseMermaid(code: string): Promise<{ valid: boolean, error?: string }> {
     try {
       const mermaid = await getMermaid()
       chart.value = wrapThemeCode(code)
       await mermaid.parse(chart.value)
-      return true
+      return { valid: true }
     }
-    catch {
-      return false
+    catch (error) {
+      return {
+        valid: false,
+        error: error instanceof Error ? error.message : String(error),
+      }
     }
   }
 
-  async function renderMermaid(code: string): Promise<string | null> {
-    const isValid = await parseMermaid(code)
-    if (!isValid || !isClient())
-      return null
+  async function renderMermaid(code: string): Promise<{ svg?: string, error?: string, valid: boolean }> {
+    const { valid, error } = await parseMermaid(code)
+    if (!valid || !isClient())
+      return { error, valid: false }
 
     const id = `mermaid-${randomStr()}`
     try {
       const mermaid = await getMermaid()
       const result = await mermaid.render(id, wrapThemeCode(code))
-      return result.svg
+      return { svg: result.svg, valid: true }
     }
-    catch {
+    catch (error) {
       const element = document.getElementById(`d${id}`)
       if (element)
         element.remove()
-      return null
+      return {
+        valid: false,
+        error: error instanceof Error ? error.message : String(error),
+      }
     }
   }
 
@@ -83,7 +89,7 @@ export function useMermaid(options?: UseMermaidOptions) {
     onError?: (error: Error) => void,
   ) {
     try {
-      const svg = await renderMermaid(code)
+      const { svg } = await renderMermaid(code)
       if (!svg) {
         onError?.(new Error('SVG not found. Please wait for the diagram to render.'))
         return

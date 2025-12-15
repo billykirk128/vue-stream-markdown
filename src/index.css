@@ -341,6 +341,10 @@
   user-select: none;
 }
 
+.stream-markdown [data-stream-markdown='mermaid-previewer'] [data-stream-markdown='error-component'] {
+  padding: 1rem;
+}
+
 .stream-markdown [data-stream-markdown='blockquote'] {
   position: relative;
   margin-inline: 0;
