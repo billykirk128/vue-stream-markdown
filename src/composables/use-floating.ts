@@ -1,18 +1,24 @@
-import type { Placement } from '@floating-ui/vue'
+import type { Placement } from '@floating-ui/dom'
 import type { MaybeRef } from 'vue'
-import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/vue'
+import {
+  autoUpdate,
+  computePosition,
+  flip,
+  offset,
+  shift,
+} from '@floating-ui/dom'
 import { useEventListener } from '@vueuse/core'
-import { computed, ref, unref } from 'vue'
+import { computed, ref, unref, watch, watchEffect } from 'vue'
 import { isClient } from '../utils'
 
-interface UseFloatingElementOptions {
+interface UseFloatingOptions {
   trigger?: MaybeRef<'hover' | 'click'>
   placement?: MaybeRef<Placement>
   delay?: MaybeRef<number | [number, number]>
   getContainer?: () => HTMLElement | undefined
 }
 
-export function useFloatingElement(options: UseFloatingElementOptions) {
+export function useFloating(options: UseFloatingOptions) {
   const trigger = computed((): 'hover' | 'click' => unref(options.trigger) ?? 'hover')
   const placement = computed((): Placement => unref(options.placement) ?? 'top')
   const delay = computed((): number | [number, number] => unref(options.delay) ?? [100, 100])
@@ -24,6 +30,61 @@ export function useFloatingElement(options: UseFloatingElementOptions) {
   let hideTimer: number | null = null
 
   const open = ref(false)
+
+  const x = ref<number | null>(null)
+  const y = ref<number | null>(null)
+  const strategy = ref<'absolute' | 'fixed'>('absolute')
+
+  // Auto-update position when elements or placement change
+  let cleanupAutoUpdate: (() => void) | null = null
+
+  async function updatePosition() {
+    if (!referenceEl.value || !floatingEl.value || !isClient())
+      return
+
+    try {
+      const position = await computePosition(
+        referenceEl.value,
+        floatingEl.value,
+        {
+          placement: placement.value,
+          middleware: [
+            offset(6),
+            flip(),
+            shift({ padding: 5 }),
+          ],
+        },
+      )
+
+      x.value = position.x
+      y.value = position.y
+      strategy.value = position.strategy
+    }
+    catch {
+      // safe guard
+    }
+  }
+
+  watchEffect(() => {
+    if (cleanupAutoUpdate) {
+      cleanupAutoUpdate()
+      cleanupAutoUpdate = null
+    }
+
+    if (!referenceEl.value || !floatingEl.value || !isClient())
+      return
+
+    cleanupAutoUpdate = autoUpdate(
+      referenceEl.value,
+      floatingEl.value,
+      updatePosition,
+    )
+  })
+
+  watch(placement, () => {
+    if (open.value)
+      updatePosition()
+  })
 
   const parentEl = computed(() => {
     if (!isClient())
@@ -40,20 +101,6 @@ export function useFloatingElement(options: UseFloatingElementOptions) {
     return target || 'body'
   })
 
-  const { x, y, strategy, update } = useFloating(
-    referenceEl,
-    floatingEl,
-    {
-      placement,
-      middleware: [
-        offset(6),
-        flip(),
-        shift({ padding: 5 }),
-      ],
-      whileElementsMounted: autoUpdate,
-    },
-  )
-
   const floatingStyle = computed(() => ({
     position: strategy.value,
     top: `${y.value ?? 0}px`,
@@ -66,7 +113,7 @@ export function useFloatingElement(options: UseFloatingElementOptions) {
 
     showTimer = window.setTimeout(() => {
       open.value = true
-      update()
+      updatePosition()
     }, showDelay)
   }
 
@@ -81,7 +128,7 @@ export function useFloatingElement(options: UseFloatingElementOptions) {
 
   function toggle() {
     open.value = !open.value
-    update()
+    updatePosition()
   }
 
   function onMouseEnter() {
@@ -117,9 +164,8 @@ export function useFloatingElement(options: UseFloatingElementOptions) {
       return
 
     const target = event.target as Node
-    const isClickInside
-      = referenceEl.value?.contains(target)
-        || floatingEl.value?.contains(target)
+    const isClickInside = referenceEl.value?.contains(target)
+      || floatingEl.value?.contains(target)
 
     if (!isClickInside) {
       open.value = false

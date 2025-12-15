@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Placement } from '@floating-ui/vue'
+import type { Placement } from '@floating-ui/dom'
 import { toRefs } from 'vue'
-import { useFloatingElement } from 'vue-stream-markdown'
+import { useFloating } from 'vue-stream-markdown'
 
 defineOptions({
   inheritAttrs: false,
@@ -33,7 +33,7 @@ const {
   onClick,
   onFloatingEnter,
   onFloatingLeave,
-} = useFloatingElement({
+} = useFloating({
   trigger,
   placement,
   delay,

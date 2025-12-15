@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Placement } from '@floating-ui/vue'
+import type { Placement } from '@floating-ui/dom'
 import { toRefs } from 'vue'
-import { useContext, useFloatingElement } from '../composables'
+import { useContext, useFloating } from '../composables'
 
 defineOptions({
   inheritAttrs: false,
@@ -35,7 +35,7 @@ const {
   onClick,
   onFloatingEnter,
   onFloatingLeave,
-} = useFloatingElement({
+} = useFloating({
   placement,
   delay,
   trigger,

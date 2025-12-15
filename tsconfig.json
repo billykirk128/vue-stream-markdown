@@ -29,8 +29,7 @@
   },
   "include": [
     "src",
-    "docs/**/*.vue",
-    "docs/**/*.ts",
+    "docs",
     "docs/.**/**/*.ts",
     "docs/.**/**/*.vue"
   ],
