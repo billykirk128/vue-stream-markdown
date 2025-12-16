@@ -3,12 +3,13 @@ import type { CodeOptions, MermaidOptions, SelectOption, ShikiOptions } from 'vu
 import { throttle } from '@antfu/utils'
 import { useCycleList, useResizeObserver } from '@vueuse/core'
 import * as LZString from 'lz-string'
-import { Markdown, SUPPORT_LANGUAGES } from 'vue-stream-markdown'
+import { Markdown, normalize, SUPPORT_LANGUAGES } from 'vue-stream-markdown'
 import { ChartPie } from './icons'
 import { DEFAULT_MARKDOWN_PATH, getPresetContent } from './markdown'
-import { getContentFromUrl } from './utils'
+import { getContentFromUrl, removeUnclosedGithubTag } from './utils'
 
 const EChartsPreviewer = defineAsyncComponent(() => import('./components/echarts.vue'))
+const HtmlNodeRenderer = defineAsyncComponent(() => import('./components/html.vue'))
 
 const { isDark } = useDark()
 const userConfig = useUserConfig()
@@ -139,6 +140,11 @@ function getContainer() {
   return containerRef.value
 }
 
+function normalizeContent(content: string) {
+  const _content = normalize(content)
+  return removeUnclosedGithubTag(_content)
+}
+
 const scrollToBottom = throttle(800, () => {
   if (!userConfig.value.autoScroll)
     return
@@ -248,6 +254,10 @@ onMounted(() => {
               echarts: EChartsPreviewer,
             },
           }"
+          :node-renderers="{
+            html: HtmlNodeRenderer,
+          }"
+          :normalize="normalizeContent"
         />
       </div>
     </template>

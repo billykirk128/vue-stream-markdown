@@ -8,6 +8,7 @@ export const MARKDOWN_NAME: Record<string, string> = {
   './code-blocks.md': 'Code Blocks',
   './footnote.md': 'Footnote',
   './gfm.md': 'GitHub Flavored Markdown',
+  './html.md': 'Custom Html Render',
   './image-carousel.md': 'Image Carousel',
   './landing-page.md': 'Landing Page',
   './mathematics.md': 'Mathematics',

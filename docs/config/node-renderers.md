@@ -185,3 +185,14 @@ If `preload.nodeRenderers` is not specified, the default list above is used. Set
 - Use the provided Props types for full TypeScript support
 - The `NodeList` component is available for rendering child nodes
 - Renderers receive all context props including `node`, `isDark`...
+
+## Special Considerations: HTML Nodes
+
+The `html` node type has special security considerations in streaming rendering scenarios. By default, the built-in HTML renderer renders HTML nodes as empty to prevent XSS attacks, since HTML content in streaming scenarios is unpredictable.
+
+If you need to render HTML content, you should implement a custom HTML renderer with proper sanitization and filtering. See the [HTML Node Rendering](/feature/html-rendering) guide for detailed information on:
+
+- Security considerations and XSS prevention
+- How to implement custom HTML renderers with filtering
+- Handling unclosed tags in streaming scenarios
+- Best practices for safe HTML rendering

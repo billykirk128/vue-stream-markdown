@@ -16,6 +16,7 @@ const Features: DefaultTheme.NavItemWithLink[] = [
   { text: 'CJK Language Support', link: '/feature/cjk-language-support' },
   { text: 'Code Blocks', link: '/feature/code-blocks' },
   { text: 'Github Flavored Markdown', link: '/feature/gfm' },
+  { text: 'HTML Node Rendering', link: '/feature/html-rendering' },
   { text: 'Mathematics', link: '/feature/mathematics' },
   { text: 'Mermaid Diagrams', link: '/feature/mermaid' },
   { text: 'Security', link: '/feature/security' },

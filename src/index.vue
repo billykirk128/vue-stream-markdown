@@ -36,6 +36,7 @@ const markdownParser = new MarkdownParser({
   mdastOptions: props.mdastOptions,
   postprocess: props.postprocess,
   preprocess: props.preprocess,
+  normalize: props.normalize,
 })
 
 const processed = computed(() => markdownParser.parseMarkdown(props.content))

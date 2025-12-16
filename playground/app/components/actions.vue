@@ -10,7 +10,7 @@ import {
   CirclePause,
   CirclePlay,
   CircleStop,
-  Github,
+  GitHub,
   Languages,
   ListTree,
   Moon,
@@ -154,7 +154,7 @@ const actions = computed((): Action[] => {
     }),
     wrapAction({
       name: 'View on GitHub',
-      icon: Github,
+      icon: GitHub,
       onClick: () => window.open(homepage, '_blank'),
     }),
   ].filter(Boolean) as Action[]
