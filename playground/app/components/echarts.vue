@@ -45,6 +45,11 @@ watch(
   { immediate: true },
 )
 
+onMounted(() => {
+  if (data.value && !chart.value)
+    renderChart()
+})
+
 useResizeObserver(chartRef, () => {
   chart.value?.resize()
 })
