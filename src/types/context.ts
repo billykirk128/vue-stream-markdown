@@ -86,6 +86,12 @@ export type ImageControlsConfig
 export type MermaidControlsConfig
   = | boolean
     | {
+      /**
+       * Disable drag/pan in page preview (but keep it in fullscreen preview)
+       * Useful for mobile devices where drag interactions can interfere with page scrolling
+       * @default true
+       */
+      inlineInteractive?: boolean
       position?: ZoomControlPosition
       customize?: ControlTransformer<CodeNodeRendererProps>
     }

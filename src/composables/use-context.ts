@@ -1,5 +1,5 @@
 import type { MaybeRef } from 'vue'
-import type { Icons, ParsedNode } from '../types'
+import type { Icons, ParsedNode, UIOptions } from '../types'
 import { computed, inject, provide, unref } from 'vue'
 
 const CONTEXT_KEY = Symbol('stream-markdown-context')
@@ -7,7 +7,7 @@ const CONTEXT_KEY = Symbol('stream-markdown-context')
 interface Context {
   mode?: MaybeRef<'static' | 'streaming'>
   isDark?: MaybeRef<boolean>
-  hideTooltip?: MaybeRef<boolean>
+  uiOptions?: MaybeRef<UIOptions | undefined>
   icons?: MaybeRef<Icons>
   enableAnimate?: MaybeRef<boolean | undefined>
   parsedNodes?: MaybeRef<ParsedNode[]>
@@ -19,10 +19,14 @@ export function useContext() {
   const context = injectContext()
 
   const mode = computed(() => unref(context.mode) ?? 'streaming')
-  const hideTooltip = computed(() => unref(context.hideTooltip) ?? false)
   const icons = computed((): Partial<Icons> => unref(context.icons) ?? {})
+
+  const uiOptions = computed(() => unref(context.uiOptions) ?? {})
+  const hideTooltip = computed(() => uiOptions.value.hideTooltip ?? false)
+
   const isDark = computed(() => unref(context.isDark) ?? false)
   const enableAnimate = computed(() => unref(context.enableAnimate))
+
   const parsedNodes = computed(() => unref(context.parsedNodes) ?? [])
 
   function provideContext(ctx: Partial<Context>) {

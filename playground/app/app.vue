@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CodeOptions, MermaidOptions, SelectOption, ShikiOptions, UIOptions } from 'vue-stream-markdown'
+import type { CodeOptions, ControlsConfig, MermaidOptions, SelectOption, ShikiOptions, UIOptions } from 'vue-stream-markdown'
 import { throttle } from '@antfu/utils'
 import { useCycleList, useResizeObserver } from '@vueuse/core'
 import * as LZString from 'lz-string'
@@ -93,6 +93,14 @@ const mermaidOptions = computed((): MermaidOptions => {
 const uiOptions = computed((): UIOptions => {
   return {
     hideTooltip: isMobile.value,
+  }
+})
+
+const controlsConfig = computed((): ControlsConfig => {
+  return {
+    mermaid: {
+      inlineInteractive: !isMobile.value,
+    },
   }
 })
 
@@ -256,6 +264,7 @@ onMounted(() => {
           :code-options="codeOptions"
           :mermaid-options="mermaidOptions"
           :ui-options="uiOptions"
+          :controls="controlsConfig"
           :previewers="{
             progressive: {
               echarts: true,

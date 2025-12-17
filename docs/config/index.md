@@ -227,6 +227,13 @@ Position of the control buttons for images.
 
 Controls for Mermaid diagrams. Can be a boolean or an object with zoom options.
 
+##### inlineInteractive
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Enable drag/pan interactions in page preview. When set to `false`, drag/pan is disabled in page preview but kept in fullscreen preview. Useful for mobile devices where drag interactions can interfere with page scrolling.
+
 ##### position
 
 - **Type:** `ZoomControlPosition`

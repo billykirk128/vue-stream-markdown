@@ -10,10 +10,12 @@ import Spin from '../spin.vue'
 import ZoomContainer from '../zoom-container.vue'
 
 const props = withDefaults(defineProps<CodeNodeRendererProps & {
+  interactive?: boolean
   throttle?: number
   minHeight?: number
   containerHeight?: string | number
 }>(), {
+  interactive: true,
   throttle: 300,
   minHeight: 60,
 })
@@ -190,7 +192,7 @@ if (!props.containerHeight) {
       />
     </template>
 
-    <ZoomContainer :show-control="showControl" :position="controlPosition">
+    <ZoomContainer :show-control="showControl" :position="controlPosition" :interactive="interactive">
       <template #controls="buttonProps">
         <Button
           v-for="item in mermaidControls"

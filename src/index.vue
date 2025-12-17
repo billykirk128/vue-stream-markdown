@@ -68,8 +68,6 @@ const icons = computed((): Icons => ({
   ...props.icons,
 }))
 
-const hideTooltip = computed(() => uiOptions.value?.hideTooltip ?? false)
-
 function getContainer(): HTMLElement | undefined {
   return containerRef.value
 }
@@ -107,7 +105,7 @@ watch(() => props.locale, () => loadLocaleMessages(props.locale))
 provideContext({
   mode,
   icons,
-  hideTooltip,
+  uiOptions,
   isDark,
   enableAnimate,
   parsedNodes,

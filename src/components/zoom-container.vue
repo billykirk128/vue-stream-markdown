@@ -6,11 +6,13 @@ import { useI18n, useZoom } from '../composables'
 import Button from './button.vue'
 
 const props = withDefaults(defineProps<{
+  interactive?: boolean
   showControl?: boolean
   controlSize?: 'vanilla' | 'large'
   position?: ZoomControlPosition
   containerStyle?: CSSProperties
 }>(), {
+  interactive: true,
   showControl: true,
   controlSize: 'vanilla',
   position: 'bottom-right',
@@ -120,17 +122,50 @@ function onWheel(event: WheelEvent) {
     handleWheel(event, containerRef.value)
 }
 
+function onPointerDown(event: PointerEvent) {
+  if (!props.interactive)
+    return
+
+  event.preventDefault()
+  startDrag(event)
+}
+
+function onPointerMove(event: PointerEvent) {
+  if (!props.interactive)
+    return
+
+  event.preventDefault()
+  onDrag(event)
+}
+
+function onPointerUp(event: PointerEvent) {
+  if (!props.interactive)
+    return
+
+  event.preventDefault()
+  stopDrag()
+}
+
 function onTouchStart(event: TouchEvent) {
+  if (!props.interactive)
+    return
+
   if (containerRef.value)
     handleTouchStart(event, containerRef.value)
 }
 
 function onTouchMove(event: TouchEvent) {
+  if (!props.interactive)
+    return
+
   if (containerRef.value)
     handleTouchMove(event, containerRef.value)
 }
 
 function onTouchEnd(event: TouchEvent) {
+  if (!props.interactive)
+    return
+
   handleTouchEnd(event)
 }
 </script>
@@ -139,17 +174,20 @@ function onTouchEnd(event: TouchEvent) {
   <div
     ref="containerRef"
     data-stream-markdown="zoom-container"
+    :style="{
+      touchAction: interactive ? 'none' : 'auto',
+    }"
     @wheel="onWheel"
     @touchstart="onTouchStart"
     @touchmove="onTouchMove"
     @touchend="onTouchEnd"
-    @pointerdown.prevent="startDrag"
-    @pointermove.prevent="onDrag"
-    @pointerup.prevent="stopDrag"
-    @pointercancel.prevent="stopDrag"
-    @pointerleave.prevent="stopDrag"
+    @pointerdown="onPointerDown"
+    @pointermove="onPointerMove"
+    @pointerup="onPointerUp"
+    @pointercancel="onPointerUp"
+    @pointerleave="onPointerUp"
   >
-    <div v-if="showControl" data-stream-markdown="zoom-controls" :style="controlsPosition" @click.stop>
+    <div v-if="showControl && interactive" data-stream-markdown="zoom-controls" :style="controlsPosition" @click.stop>
       <slot name="controls" v-bind="controlButtonProps" />
       <Button
         v-for="item in controls"

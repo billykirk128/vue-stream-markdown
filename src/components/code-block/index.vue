@@ -31,7 +31,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
 
 const { t } = useI18n()
 
-const { isControlEnabled, resolveControls } = useControls({
+const { isControlEnabled, getControlValue, resolveControls } = useControls({
   controls,
 })
 const { installed: hasMermaid } = useMermaid()
@@ -152,6 +152,8 @@ const PreviewComponent = computed((): Component | undefined => {
 
   return previewer
 })
+
+const inlineInteractive = computed(() => getControlValue('mermaid.inlineInteractive') ?? true)
 
 function normalizeHeight(height: string | number) {
   return typeof height === 'number' ? `${height}px` : height
@@ -310,6 +312,7 @@ watch(
         v-if="previewable"
         v-show="mode === 'preview'"
         v-bind="props"
+        :interactive="inlineInteractive"
       />
       <main v-show="mode === 'source'">
         <slot />
