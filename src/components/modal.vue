@@ -3,6 +3,7 @@ import type { CSSProperties } from 'vue'
 import { createReusableTemplate, useEventListener } from '@vueuse/core'
 import { computed, useSlots } from 'vue'
 import { useContext } from '../composables'
+import { isClient } from '../utils'
 
 const props = withDefaults(defineProps<{
   title?: string
@@ -13,7 +14,7 @@ const props = withDefaults(defineProps<{
   close?: () => void
 }>(), {
   zIndex: 9999,
-  transition: 'modal',
+  transition: 'stream-markdown-modal',
 })
 
 const slots = useSlots()
@@ -22,14 +23,19 @@ const open = defineModel<boolean>('open', { required: false, default: false })
 
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate()
 
-const { getContainer } = useContext()
-const container = computed(() => getContainer() || 'body')
+const { getOverlayContainer } = useContext()
 
 const modalStyle = computed(() => ({
   ...props.modalStyle,
   zIndex: props.zIndex,
 }))
 const showHeader = computed(() => !!props.title || !!slots.title || !!slots.extra)
+
+const container = computed(() => {
+  if (!isClient())
+    return 'body'
+  return getOverlayContainer() || document.body
+})
 
 useEventListener(document, 'keyup', (event) => {
   if (event.key === 'Escape' || event.key === 'Esc') {

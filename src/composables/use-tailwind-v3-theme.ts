@@ -8,7 +8,7 @@ const reg = /^(?:hsl|rgb|oklch|lab|lch)\(/
 
 interface UseTailwindV3ThemeOptions {
   element?: MaybeRefOrGetter<HTMLElement | undefined>
-  styleScope?: MaybeRef<string>
+  styleScope?: MaybeRef<string | string[]>
 }
 
 export function useTailwindV3Theme(options: UseTailwindV3ThemeOptions) {
@@ -17,7 +17,12 @@ export function useTailwindV3Theme(options: UseTailwindV3ThemeOptions) {
     immediate: false,
   })
 
-  const styleScope = computed(() => unref(options.styleScope) || '.stream-markdown')
+  const styleScope = computed(() => {
+    const scope = unref(options.styleScope)
+    if (!scope)
+      return ['.stream-markdown', '.stream-markdown-overlay']
+    return Array.isArray(scope) ? scope : [scope]
+  })
 
   const element = computed((): Element | undefined => {
     const el = toValue(options.element)
@@ -40,7 +45,7 @@ export function useTailwindV3Theme(options: UseTailwindV3ThemeOptions) {
     }
 
     if (cssVariables.length > 0) {
-      css.value = `${styleScope.value} {\n${cssVariables.join('\n')}\n}`
+      css.value = styleScope.value.map(scope => `${scope} {\n${cssVariables.join('\n')}\n}`).join('\n')
       load()
     }
     else {

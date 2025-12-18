@@ -51,7 +51,7 @@ watch(
 </script>
 
 <template>
-  <Transition name="code-fade" mode="out-in">
+  <Transition name="stream-markdown-code-switch" mode="out-in">
     <div
       v-if="tokens"
       data-stream-markdown="shiki"

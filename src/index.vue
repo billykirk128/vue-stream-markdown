@@ -72,6 +72,10 @@ function getContainer(): HTMLElement | undefined {
   return containerRef.value
 }
 
+function getOverlayContainer(): Element | null {
+  return document.querySelector('#stream-markdown-overlay')
+}
+
 const { preload: preloadShiki, dispose: disposeShiki } = useShiki({
   shikiOptions,
 })
@@ -80,7 +84,29 @@ const { preload: preloadMermaid, dispose: disposeMermaid } = useMermaid({
 })
 const { preload: preloadKatex, dispose: disposeKatex } = useKatex()
 
+function ensureOverlayContainer() {
+  const overlayContainer = getOverlayContainer()
+  if (!overlayContainer) {
+    const div = document.createElement('div')
+    div.id = 'stream-markdown-overlay'
+    div.classList.add('stream-markdown-overlay')
+    div.classList.add(isDark.value ? 'dark' : 'light')
+    document.body.appendChild(div)
+  }
+}
+
+function updateOverlayContainerTheme() {
+  const overlayContainer = getOverlayContainer()
+  if (!overlayContainer)
+    return
+
+  overlayContainer.classList.toggle('dark', isDark.value)
+  overlayContainer.classList.toggle('light', !isDark.value)
+}
+
 async function bootstrap() {
+  ensureOverlayContainer()
+
   const tasks = [
     preloadShiki(), // init shiki highlighter
     preloadMermaid(), // init mermaid instance
@@ -101,6 +127,7 @@ onMounted(bootstrap)
 
 watch(() => props.mode, () => markdownParser.updateMode(props.mode))
 watch(() => props.locale, () => loadLocaleMessages(props.locale))
+watch(() => props.isDark, () => updateOverlayContainerTheme())
 
 provideContext({
   mode,
@@ -110,6 +137,7 @@ provideContext({
   enableAnimate,
   parsedNodes,
   getContainer,
+  getOverlayContainer,
   onCopied: (content: string) => {
     emits('copied', content)
   },

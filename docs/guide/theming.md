@@ -148,7 +148,7 @@ const isDark = ref(false)
 
 // Configure Tailwind v3 theme adapter
 const { generateCSS } = useTailwindV3Theme({
-  styleScope: '.stream-markdown', // Optional, defaults to '.stream-markdown'
+  styleScope: ['.stream-markdown', '.stream-markdown-overlay'],
   element: document.body, // Optional, defaults to document.body
 })
 

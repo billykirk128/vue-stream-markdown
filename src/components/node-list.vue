@@ -49,7 +49,7 @@ function getNodeKey(node: ParsedNode, index: number) {
   <template v-for="item in nodes" :key="item.key">
     <Transition
       v-if="enableTransition && !excludeTransition.includes(item.node.type)"
-      name="typewriter"
+      name="stream-markdown-typewriter"
       appear
     >
       <component

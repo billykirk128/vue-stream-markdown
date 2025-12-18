@@ -12,6 +12,7 @@ interface Context {
   enableAnimate?: MaybeRef<boolean | undefined>
   parsedNodes?: MaybeRef<ParsedNode[]>
   getContainer?: () => HTMLElement | undefined
+  getOverlayContainer?: () => Element | null
   onCopied?: (content: string) => void
 }
 
@@ -51,6 +52,9 @@ export function useContext() {
     parsedNodes,
     get getContainer() {
       return context.getContainer || (() => undefined)
+    },
+    get getOverlayContainer() {
+      return context.getOverlayContainer || (() => null)
     },
     get onCopied() {
       return context.onCopied || (() => {})
