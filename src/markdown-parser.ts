@@ -57,11 +57,13 @@ export class MarkdownParser {
   }
 
   markdownToAst(content: string, loading: boolean = false): SyntaxTree {
+    const singleDollarTextMath = this.options.mdastOptions?.singleDollarTextMath ?? false
+
     const data = fromMarkdown(content, {
       extensions: [
         gfm(),
         math({
-          singleDollarTextMath: false,
+          singleDollarTextMath,
         }),
         frontmatter(),
         cjkFriendlyExtension(),

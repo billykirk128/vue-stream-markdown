@@ -35,6 +35,7 @@ export interface MarkdownParserOptions {
 }
 
 export interface MdastOptions {
+  singleDollarTextMath?: boolean
   from?: FromMarkdownExtension[]
   to?: ToMarkdownExtension[]
   micromark?: MicromarkExtension[]
