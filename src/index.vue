@@ -40,7 +40,10 @@ const { provideContext } = useContext()
 
 const markdownParser = new MarkdownParser(props)
 
-const processed = computed(() => markdownParser.parseMarkdown(props.content))
+const processed = computed(() => {
+  markdownParser.updateMode(props.mode)
+  return markdownParser.parseMarkdown(props.content)
+})
 
 const parsedNodes = computed(() => processed.value.nodes)
 const processedContent = computed(() => processed.value.content)
@@ -118,7 +121,6 @@ async function bootstrap() {
 
 onMounted(bootstrap)
 
-watch(() => props.mode, () => markdownParser.updateMode(props.mode))
 watch(() => props.locale, () => loadLocaleMessages(props.locale))
 watch(() => props.isDark, () => updateOverlayContainerTheme())
 

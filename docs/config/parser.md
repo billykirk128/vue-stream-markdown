@@ -199,12 +199,6 @@ function postprocess(ast: SyntaxTree): SyntaxTree {
 </template>
 ```
 
-### Built-in Postprocess Functions
-
-The following functions are available for use in `postprocess`:
-
-- `postFixText`: Fixes text nodes, such as trimming trailing `$` and `$$` to fix preprocess math breaking
-
 ## Complete Example
 
 Here's a complete example showing how to use all four functions together:

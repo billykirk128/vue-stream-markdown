@@ -1,7 +1,6 @@
 import type { SyntaxTree } from '../types'
 import { flow } from '../utils'
 import { postFixFootnote } from './footnote'
-import { postFixText } from './text'
 
 export function postNormalize(data: SyntaxTree): SyntaxTree {
   return flow([
@@ -10,12 +9,9 @@ export function postNormalize(data: SyntaxTree): SyntaxTree {
 }
 
 export function postprocess(data: SyntaxTree): SyntaxTree {
-  return flow([
-    postFixText,
-  ])(data)
+  return data
 }
 
 export {
   postFixFootnote,
-  postFixText,
 }
