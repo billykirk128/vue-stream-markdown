@@ -5,7 +5,7 @@ import QuickLRU from 'quick-lru'
 import {
   BUILTIN_FROM_MDAST_EXTENSIONS,
   BUILTIN_MICROMARK_EXTENSIONS,
-  BUILTIN_TO_MARKDOWN_EXTENSIONS,
+  BUILTIN_TO_MDAST_EXTENSIONS,
 } from './constants'
 import { postNormalize, postprocess } from './postprocess'
 import { normalize, parseMarkdownIntoBlocks, preprocess } from './preprocess'
@@ -49,7 +49,7 @@ export class MarkdownParser {
       options.mdastOptions?.builtin?.from,
     )
     this.toMdastExtensions = resolveBuiltinExtensions(
-      BUILTIN_TO_MARKDOWN_EXTENSIONS,
+      BUILTIN_TO_MDAST_EXTENSIONS,
       ctx,
       options.mdastOptions?.builtin?.to,
     )

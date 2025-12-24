@@ -32,9 +32,10 @@ export default defineComponent({
             props.tokens.themeName,
           ],
           'data-language': props.tokens.grammarState?.lang,
-          'style': {
-            counterReset: 'line',
-          },
+          'data-bg': props.tokens.bg,
+          'data-fg': props.tokens.fg,
+          // background color most time looks not good, so we don't set it
+          'style': `counter-reset: line; color: ${props.tokens.fg};`,
         },
         h(
           'code',

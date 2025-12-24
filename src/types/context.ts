@@ -12,7 +12,7 @@ import type {
   BuiltinFromMdastExtension,
   BuiltinMicromarkExtension,
   BuiltinPluginControl,
-  BuiltinToMarkdownExtension,
+  BuiltinToMdastExtension,
 } from './plugins'
 import type { CodeNodeRendererProps, ImageNodeRendererProps, TableNodeRendererProps } from './renderer'
 import type { BuiltinNodeRenderers, ControlTransformer, Icons, MaybePromise } from './shared'
@@ -48,7 +48,7 @@ export interface MdastOptions {
   builtin?: {
     micromark?: BuiltinPluginControl<BuiltinMicromarkExtension, MicromarkExtension>
     from?: BuiltinPluginControl<BuiltinFromMdastExtension, FromMarkdownExtension>
-    to?: BuiltinPluginControl<BuiltinToMarkdownExtension, ToMarkdownExtension>
+    to?: BuiltinPluginControl<BuiltinToMdastExtension, ToMarkdownExtension>
   }
   singleDollarTextMath?: boolean
 }
