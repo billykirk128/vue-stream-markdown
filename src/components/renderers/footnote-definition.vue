@@ -44,7 +44,7 @@ function scrollToReference() {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='footnote-definition'] {
     color: var(--muted-foreground);
 

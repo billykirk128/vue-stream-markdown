@@ -3,7 +3,7 @@
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='spin'] {
     display: inline-block;
     height: 1rem;

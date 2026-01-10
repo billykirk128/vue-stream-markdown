@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<ParagraphNodeRendererProps>(), {})
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='paragraph'] {
     margin-bottom: 1rem;
     vertical-align: middle;

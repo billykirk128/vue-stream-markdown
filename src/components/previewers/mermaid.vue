@@ -229,7 +229,7 @@ if (!props.containerHeight) {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='mermaid-previewer'] {
     text-align: center;
 

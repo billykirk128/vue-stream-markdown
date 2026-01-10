@@ -42,7 +42,7 @@ function getAlign(index: number) {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='table'] {
     width: 100%;
     border-collapse: collapse;

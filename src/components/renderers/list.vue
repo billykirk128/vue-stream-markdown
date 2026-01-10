@@ -20,7 +20,7 @@ const id = computed(() => isTaskList.value
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='ordered-list'],
   & [data-stream-markdown='unordered-list'],
   & [data-stream-markdown='task-list'] {

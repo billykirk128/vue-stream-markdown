@@ -17,7 +17,7 @@ const id = computed(() => `heading-${depth.value}`)
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='heading-1'],
   & [data-stream-markdown='heading-2'],
   & [data-stream-markdown='heading-3'],

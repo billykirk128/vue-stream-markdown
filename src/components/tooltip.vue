@@ -75,7 +75,7 @@ defineExpose({ show, hide })
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='tooltip'] {
     background: var(--popover);
     color: var(--popover-foreground);

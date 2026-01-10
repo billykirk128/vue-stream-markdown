@@ -43,7 +43,7 @@ const Error = computed(() => hardenOptions.value?.errorComponent ?? ErrorCompone
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='link'] {
     color: var(--primary);
     text-decoration: underline;

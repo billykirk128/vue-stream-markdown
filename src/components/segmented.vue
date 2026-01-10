@@ -54,7 +54,7 @@ function onClick(item: SelectOption) {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='segmented'] {
     display: flex;
     align-items: center;

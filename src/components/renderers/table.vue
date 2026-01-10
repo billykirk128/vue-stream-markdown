@@ -146,7 +146,7 @@ function getNodes(cell: unknown) {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='table-wrapper'] {
     display: flex;
     align-items: center;

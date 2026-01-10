@@ -9,7 +9,7 @@ withDefaults(defineProps<InlineCodeNodeRendererProps>(), {})
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='inline-code'] {
     background-color: var(--muted);
     border-radius: 0.25rem;

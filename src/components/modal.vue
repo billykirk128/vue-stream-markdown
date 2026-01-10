@@ -71,7 +71,7 @@ useEventListener(document, 'keyup', (event) => {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='modal'] {
     position: fixed;
     inset: 0;

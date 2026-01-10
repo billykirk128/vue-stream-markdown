@@ -146,7 +146,7 @@ function handleMouseLeave() {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='image'] {
     display: block;
     height: auto;

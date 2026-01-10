@@ -102,7 +102,7 @@ function onDropdownClick(event: MouseEvent, item: SelectOption) {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='button'] {
     display: flex;
     align-items: center;

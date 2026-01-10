@@ -222,7 +222,7 @@ function onTouchEnd(event: TouchEvent) {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='zoom-container'] {
     height: 100%;
     position: relative;
@@ -256,7 +256,7 @@ function onTouchEnd(event: TouchEvent) {
 }
 
 @media (max-width: 1024px) {
-  :is(.stream-markdown, .stream-markdown-overlay) {
+  :where(.stream-markdown, .stream-markdown-overlay) {
     & [data-stream-markdown='zoom-controls'] {
       gap: 0;
     }

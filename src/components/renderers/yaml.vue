@@ -31,7 +31,7 @@ const rows = computed(() => [{ children: data.value.map(line => line[1]) }])
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='yaml'] {
     width: 100%;
     overflow-x: auto;

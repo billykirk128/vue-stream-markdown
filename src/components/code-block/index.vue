@@ -380,7 +380,7 @@ watch(
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='actions'] {
     display: flex;
     align-items: center;
@@ -449,7 +449,7 @@ watch(
 }
 
 @media (max-width: 1024px) {
-  :is(.stream-markdown, .stream-markdown-overlay) {
+  :where(.stream-markdown, .stream-markdown-overlay) {
     & [data-stream-markdown='code-block-header'] {
       padding-inline: 0.75rem;
     }

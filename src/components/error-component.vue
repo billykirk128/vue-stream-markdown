@@ -62,7 +62,7 @@ const isHarden = computed(() => props.variant?.startsWith?.('harden-'))
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='error-component'] {
     display: inline-block;
     color: var(--muted-foreground);

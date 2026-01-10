@@ -26,7 +26,7 @@ const checked = computed(() => !!props.node.checked)
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='list-item'] {
     padding-block: 0.25rem;
     padding-left: 0.25rem;

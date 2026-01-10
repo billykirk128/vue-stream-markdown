@@ -41,7 +41,7 @@ const component = computed(() => {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='code'],
   & [data-stream-markdown='code'] code {
     font-family: var(--font-mono);

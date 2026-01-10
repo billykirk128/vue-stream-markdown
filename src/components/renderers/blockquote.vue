@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<BlockquoteNodeRendererProps>(), {})
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='blockquote'] {
     position: relative;
     margin-inline: 0;

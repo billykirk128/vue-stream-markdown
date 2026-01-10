@@ -26,7 +26,7 @@ function scrollToFootnote() {
 </template>
 
 <style>
-:is(.stream-markdown, .stream-markdown-overlay) {
+:where(.stream-markdown, .stream-markdown-overlay) {
   & [data-stream-markdown='footnote-reference'] {
     color: var(--primary);
     cursor: pointer;
