@@ -36,7 +36,7 @@ const { isControlEnabled, getControlValue, resolveControls } = useControls({
 })
 const { installed: hasMermaid } = useMermaid()
 
-const { beforeDownload, onCopied } = useContext()
+const { icons: commonIcons, beforeDownload, onCopied } = useContext()
 const { copy, copied } = useClipboard({
   legacy: true,
 })
@@ -73,7 +73,7 @@ const icon = computed(() => {
   // Custom language icon component
   if (typeof custom === 'object')
     return custom
-  return LANGUAGE_ICONS[language.value] || LANGUAGE_ICONS.text
+  return LANGUAGE_ICONS[language.value] || commonIcons.value.code
 })
 
 const progressiveRender = computed(() => {

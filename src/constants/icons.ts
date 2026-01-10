@@ -4,7 +4,7 @@ import { defineAsyncComponent } from 'vue'
 export const ICONS = {
   arrowLeft: defineAsyncComponent(() => import('~icons/lucide/arrow-left')),
   check: defineAsyncComponent(() => import('~icons/lucide/check')),
-  code: defineAsyncComponent(() => import('~icons/lucide/code')),
+  code: defineAsyncComponent(() => import('~icons/lucide/code-xml')),
   collapse: defineAsyncComponent(() => import('~icons/lucide/chevron-down')),
   copy: defineAsyncComponent(() => import('~icons/lucide/copy')),
   cornerDownLeft: defineAsyncComponent(() => import('~icons/lucide/corner-down-left')),
