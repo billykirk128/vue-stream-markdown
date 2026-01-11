@@ -1,5 +1,19 @@
 import type { ParsedNode } from '../types'
 
+const MIDDLE_DOLLAR_PATTERN = /[^$]\$[^$]/
+const START_DOLLAR_PATTERN = /^\$[^$]/
+const END_DOLLAR_PATTERN = /[^$]\$$/
+
+export function checkMathSyntax(content: string, singleDollarEnabled: boolean = false): boolean {
+  const hasDoubleDollar = content.includes('$$')
+  const hasSingleDollar
+    = singleDollarEnabled
+      && (MIDDLE_DOLLAR_PATTERN.test(content)
+        || START_DOLLAR_PATTERN.test(content)
+        || END_DOLLAR_PATTERN.test(content))
+  return hasDoubleDollar || hasSingleDollar
+}
+
 export function findLastLeafNode(nodes: ParsedNode[]): ParsedNode | null {
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i]

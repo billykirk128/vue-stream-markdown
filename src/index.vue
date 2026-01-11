@@ -35,6 +35,7 @@ const emits = defineEmits<{
 
 const {
   mode,
+  content,
   isDark: darkProp,
   locale: localeProp,
   shikiOptions,
@@ -58,6 +59,8 @@ const { preload: preloadMermaid, dispose: disposeMermaid } = useMermaid({
   cdnOptions: props.cdnOptions,
 })
 const { preload: preloadKatex, dispose: disposeKatex } = useKatex({
+  markdown: content,
+  mdastOptions: props.mdastOptions,
   cdnOptions: props.cdnOptions,
 })
 
@@ -93,9 +96,9 @@ function getContainer(): HTMLElement | undefined {
 
 async function bootstrap() {
   const tasks = [
-    preloadShiki(), // init shiki highlighter
-    preloadMermaid(), // init mermaid instance
-    preloadKatex(), // dynamic load katex css
+    preloadShiki(),
+    preloadMermaid(),
+    preloadKatex(),
     preloadAsyncComponents(icons.value),
   ]
 

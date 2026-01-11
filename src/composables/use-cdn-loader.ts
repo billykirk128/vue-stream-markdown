@@ -1,6 +1,6 @@
 import type { CdnOptions } from '../types'
 import { KATEX_VERSION, MERMAID_VERSION, SHIKI_VERSION } from '../constants'
-import { isSupportESM, trailingSlash } from '../utils'
+import { isSupportESM, removeTrailingSlash } from '../utils'
 
 interface UseCdnLoaderOptions {
   cdnOptions?: CdnOptions
@@ -20,7 +20,7 @@ export function useCdnLoader(options?: UseCdnLoaderOptions) {
   const { cdnOptions } = options ?? {}
 
   const baseUrl = cdnOptions?.baseUrl
-    ? trailingSlash(cdnOptions.baseUrl)
+    ? removeTrailingSlash(cdnOptions.baseUrl)
     : ''
   const customGetter = !!cdnOptions?.getUrl
 

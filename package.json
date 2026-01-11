@@ -40,6 +40,7 @@
     "build": "tsdown",
     "playground:dev": "pnpm -F playground dev",
     "playground:build": "pnpm -F playground generate",
+    "playground:prepare": "pnpm -F playground prepare",
     "docs:dev": "pnpm -F docs dev",
     "docs:build": "pnpm -F docs build",
     "deps": "taze major -I",
@@ -48,8 +49,7 @@
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "release": "bumpp",
-    "bootstrap": "pnpm install",
-    "prepare": "simple-git-hooks && pnpm -F playground prepare",
+    "prepare": "simple-git-hooks && pnpm playground:prepare",
     "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {

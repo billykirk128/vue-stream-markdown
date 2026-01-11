@@ -4,8 +4,8 @@ export function flow<T>(fns: Array<(arg: T) => T>): (arg: T) => T {
   return (input: T) => fns.reduce((acc, fn) => fn(acc), input)
 }
 
-export function trailingSlash(url: string): string {
-  return url?.endsWith('/') ? url : `${url}/`
+export function removeTrailingSlash(url: string): string {
+  return url?.endsWith('/') ? url.slice(0, -1) : `${url}`
 }
 
 export function save(filename: string, content: string | Blob, mimeType: string) {
