@@ -11,6 +11,9 @@ export default defineConfig({
       mainFields: ['module', 'main'],
     },
   },
+  outputOptions: {
+    minify: true,
+  },
   external: ['shiki', 'mermaid', 'katex'],
   css: {
     splitting: false,

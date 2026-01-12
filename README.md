@@ -1,6 +1,7 @@
 # vue-stream-markdown
 
 [![npm version][npm-version-src]][npm-version-href]
+[![bundle][bundle-src]][bundle-href]
 [![License][license-src]][license-href]
 
 A markdown renderer specially optimized for streaming scenarios, inspired by [streamdown](https://streamdown.ai/). Designed to achieve smoother streaming rendering through syntax inference and highly customizable rendering elements.
