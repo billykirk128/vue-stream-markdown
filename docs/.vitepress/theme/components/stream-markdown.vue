@@ -124,10 +124,6 @@ function cleanup() {
         theme: ['kanagawa-lotus', 'kanagawa-dragon'],
       }"
       :code-options="codeOptions"
-      :cdn-options="{
-        baseUrl: 'https://cdn.jsdelivr.net/npm/',
-        mermaid: 'umd',
-      }"
     />
 
     <div class="opacity-0 duration-300 absolute z-10 group-hover:opacity-100 hover:opacity-100 -left-4 -top-4">

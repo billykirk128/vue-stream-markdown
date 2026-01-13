@@ -29,6 +29,7 @@ coverage
 
 # vitepress
 cache
+.temp
 
 # nuxt
 .nuxt
